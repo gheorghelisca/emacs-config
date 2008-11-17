@@ -222,3 +222,5 @@
 
 (setq flyspell-default-dictionary "american")
 
+; Load cool git frontend
+(require 'magit)
