@@ -41,7 +41,7 @@
  '(ecb-source-path (quote (("/work/moesenle" "home") ("~/work/lisp/work" "COGITO") ("~/work/lisp/tests" "TESTS"))))
  '(ecb-tip-of-the-day nil)
  '(gnuserv-program (concat exec-directory "/gnuserv"))
- '(ispell-local-dictionary "american")
+ '(ispell-local-dictionary "nil")
  '(line-number-mode t)
  '(load-home-init-file t t)
  '(next-line-add-newlines nil)
@@ -64,7 +64,8 @@
  '(ecb-history-face ((((class color) (background dark)) (:inherit ecb-default-highlight-face))))
  '(ecb-method-face ((((class color) (background dark)) (:inherit ecb-default-highlight-face))))
  '(ecb-source-face ((((class color) (background dark)) (:inherit ecb-default-highlight-face :underline t))))
- '(ecb-tag-header-face ((((class color) (background dark)) (:foreground "SeaGreen1" :underline t)))))
+ '(ecb-tag-header-face ((((class color) (background dark)) (:foreground "SeaGreen1" :underline t))))
+ '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -161,6 +162,10 @@
 ; Cool object inspector
 (require 'slime-fancy-inspector)
 
+; Highlighting of changed code
+(require 'slime-highlight-edits)
+(slime-highlight-edits-init)
+
 (setq slime-multiprocessing t)
 (add-hook 'slime-mode-hook
   (lambda ()
@@ -220,7 +225,7 @@
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
 
-(setq flyspell-default-dictionary "american")
+;(setq flyspell-default-dictionary "american")
 
 ; Load cool git frontend
 (require 'magit)
