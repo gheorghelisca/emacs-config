@@ -41,6 +41,7 @@
  '(line-number-mode t)
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
+ '(menu-bar-mode t)
  '(next-line-add-newlines nil)
  '(paren-mode (quote paren) nil (paren))
  '(pc-select-meta-moves-sexps t)
@@ -250,4 +251,10 @@
    (if mark-active (list (region-beginning) (region-end))
        (list (line-beginning-position)
              (line-beginning-position 2)))))
+
+; delete trailing whitespaces in all lines before saving
+(add-hook 'write-file-hooks 'delete-trailing-whitespace)
+
+; delete whitespaces and lines > 1 at end of file before saving
+(add-hook 'write-file-hooks 'nuke-trailing-whitespace)
 
