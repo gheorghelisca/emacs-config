@@ -47,8 +47,8 @@
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(safe-local-variable-values (quote ((Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
- '(slime-complete-symbol-function (quote slime-complete-symbol*))
+ '(safe-local-variable-values (quote ((readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(tool-bar-mode nil)
  '(transient-mark-mode t)
  '(view-diary-entries-initially t))
 (custom-set-faces
@@ -108,18 +108,18 @@
 
 ; Search highlighting
 ; highlight during query
-(setq query-replace-highlight t)        
+(setq query-replace-highlight t)
 ; highlight incremental search
-(setq search-highlight t)               
+(setq search-highlight t)
 
-(setq viper-mode t)                ; enable Viper at load time
-(require 'viper)                   ; load Viper
+;;(setq viper-mode nil)                ; enable Viper at load time
+;;(require 'viper)                   ; load Viper
 
 ;(require 'vimpulse)                ; load Vimpulse
 ;(require 'redo)                    ; redo
 
 ; vim like movement in compilation/grep buffers
-(add-hook 'compilation-mode-hook 'vimove-mode)
+;;(add-hook 'compilation-mode-hook 'vimove-mode)
 
 (require 'rect-mark)
 ;(setq woman-use-own-frame nil)     ; don't create new frame for manpages
@@ -132,7 +132,7 @@
 (color-theme-hober)
 
 ; Vim-like motion
-(require 'vimove)
+;;(require 'vimove)
 
 ; C/C++ indentation config
 (require 'cc-mode)
@@ -150,22 +150,8 @@
 
 (slime-setup '(slime-fancy slime-asdf))
 (slime-highlight-edits-init)
+(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
-; Good tab-completion ;)
-;(require 'slime-c-p-c)
-;(slime-c-p-c-init)
-;
-;; Nice presentations of lisp objects in repl
-;(require 'slime-presentations)
-;(slime-presentations-init)
-;
-;; Cool object inspector
-;(require 'slime-fancy-inspector)
-;
-;; Highlighting of changed code
-;(require 'slime-highlight-edits)
-;
-;
 (setq slime-multiprocessing t)
 (add-hook 'slime-mode-hook
   (lambda ()
@@ -177,9 +163,9 @@
     ;;(put 'let* 'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
     ;;(put 'defclass 'common-lisp-indent-function '(6 4 (&whole 2 &rest 1) (&whole 2 &rest 1)))
     (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
-        
+
     (slime-define-key "\r" 'newline-and-indent)
-    (slime-define-key [tab] 'slime-indent-and-complete-symbol)))
+    (slime-define-key [tab] 'slime-fuzzy-indent-and-complete-symbol)))
 
 ; Do autoload when pressing C-l
 (add-hook 'slime-rpl-connected-hook (lambda ()
@@ -257,4 +243,3 @@
 
 ; delete whitespaces and lines > 1 at end of file before saving
 (add-hook 'write-file-hooks 'nuke-trailing-whitespace)
-
