@@ -152,13 +152,16 @@
 ;; Some additional slime config
 (add-to-list 'load-path (concat slime-*directory* "contrib/"))
 
-(slime-setup '(slime-fancy slime-asdf))
+(slime-setup '(slime-fancy slime-asdf slime-company))
 ;; (slime-highlight-edits-init)
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+
+(require 'company)
 
 (setq slime-multiprocessing t)
 (add-hook 'slime-mode-hook
   (lambda ()
+    (company-mode)
     ;;; adjust lisp indentation
     ;;(set-variable lisp-indent-function 'common-lisp-indent-function)
     ;;(put 'if 'common-lisp-indent-function '(2 &rest 2))
@@ -170,6 +173,15 @@
 
     (slime-define-key "\r" 'newline-and-indent)
     (slime-define-key [tab] 'slime-fuzzy-indent-and-complete-symbol)))
+
+(define-key company-active-map (kbd "\C-n") 'company-select-next)
+(define-key company-active-map (kbd "\C-p") 'company-select-previous)
+(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+(define-key company-active-map (kbd "\C-v") 'company-show-location)
+(define-key company-active-map (kbd "<tab>") 'company-complete)
+(define-key company-active-map (kbd "\C-g") '(lambda ()
+                                               (interactive)
+                                               (company-abort)))
 
 ;; Do autoload when pressing C-l
 (add-hook 'slime-rpl-connected-hook (lambda ()
@@ -197,9 +209,13 @@
 
 ;; paredit mode
 (require 'paredit)
-(add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'inferior-lisp-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (company-mode)
+                                  (paredit-mode +1)))
+(add-hook 'lisp-mode-hook (lambda ()
+                            (paredit-mode +1)))
+(add-hook 'inferior-lisp-mode-hook (lambda ()
+                                     (paredit-mode +1)))
 
 ;; Mouse wheel
 (autoload 'mwheel-install "mwheel" "Enable mouse wheel support.") (mwheel-install)
