@@ -9,13 +9,13 @@
 ;; start emacs server for emacsclient
 (server-start)
 
-;; use cool ldap-search when writing mails
-(load "~/.emacs.d/site/mail-addons.el")
-
 ;; slime
 (setq slime-bind-keys nil)
 (if (file-readable-p "/usr/local/lehrstuhl/DIR/lisp/config-host/slime")
   (load "/usr/local/lehrstuhl/DIR/lisp/config-host/slime"))
+
+;; use cool ldap-search and mutt aliases and addressbook for composing mails
+(require 'mail-addons)
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -244,3 +244,7 @@
 ;; (add-hook 'write-file-hooks 'nuke-trailing-whitespace)
 
 (whitespace-global-mode)
+
+(defun mutt ()
+  (interactive)
+  (ansi-term "/usr/bin/mutt" "*mutt*"))

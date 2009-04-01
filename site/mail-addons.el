@@ -1,5 +1,9 @@
+
 (require 'ldap)
 (require 'eudc)
+(require 'external-abook)
+
+(setq external-abook-command "~/.mutt/mutt-addresses-search '%s'")
 
 (setq eudc-default-return-attributes nil
       eudc-strict-return-matches nil)
@@ -37,8 +41,18 @@
 ;; Adds some hooks
 
 (eval-after-load "message"
-  '(define-key message-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+  '(progn
+     (define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline)
+     (define-key post-mode-map "\C-x\t" 'external-abook-try-expand)))
+
 (eval-after-load "sendmail"
-  '(define-key mail-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+  '(progn
+     (define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline)
+     (define-key post-mode-map "\C-x\t" 'external-abook-try-expand)))
+
 (eval-after-load "post"
-  '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+  '(progn
+     (define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline)
+     (define-key post-mode-map "\C-x\t" 'external-abook-try-expand)))
+
+(provide 'mail-addons)
