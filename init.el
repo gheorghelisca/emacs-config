@@ -247,4 +247,4 @@
 
 (defun mutt ()
   (interactive)
-  (ansi-term "/usr/bin/mutt" "*mutt*"))
+  (ansi-term "/usr/bin/mutt" "mutt"))
