@@ -11,6 +11,7 @@
 
 ;; slime
 (setq slime-bind-keys nil)
+(setq slime-*directory* "/usr/wiss/moesenle/work/lisp/sbcl/site/slime")
 (if (file-readable-p "/usr/local/lehrstuhl/DIR/lisp/config-host/slime")
   (load "/usr/local/lehrstuhl/DIR/lisp/config-host/slime"))
 
@@ -123,24 +124,9 @@
 ;; highlight incremental search
 (setq search-highlight t)
 
-;;(setq viper-mode nil)                ; enable Viper at load time
-;;(require 'viper)                   ; load Viper
-
-;;(require 'vimpulse)                ; load Vimpulse
-;;(require 'redo)                    ; redo
-
-;; vim like movement in compilation/grep buffers
-;;(add-hook 'compilation-mode-hook 'vimove-mode)
-
 (require 'rect-mark)
 ;;(setq woman-use-own-frame nil)     ; don't create new frame for manpages
 ;;(setq woman-use-topic-at-point t)  ; don't prompt upon K key (manpage display)
-
-;; ecb
-;; (require 'ecb-autoloads)
-
-;; Vim-like motion
-;;(require 'vimove)
 
 ;; C/C++ indentation config
 (require 'cc-mode)
@@ -182,6 +168,9 @@
 ;; Do autoload when pressing C-l
 (add-hook 'slime-rpl-connected-hook (lambda ()
                                       (slime-repl-eval-string "(kibo) (in-package :kibo) (values)")))
+
+;; use internal w3m browser (used in particular for clhs lookup)
+(setq browse-url-browser-function 'w3m)
 
 ;; sbcl
 (defun sbcl ()
@@ -247,4 +236,5 @@
 
 (defun mutt ()
   (interactive)
+  (cd "~")
   (ansi-term "/usr/bin/mutt" "mutt"))
