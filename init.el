@@ -1,17 +1,11 @@
 ;-*-Mode:Emacs-Lisp-*-
 
 ;; Public emacs site
-(add-to-list 'load-path "~/local/private/all/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/site")
+(add-to-list 'load-path "~/work/lisp/site/slime")
 
 ;; start emacs server for emacsclient
 (server-start)
-
-;; slime
-(setq slime-bind-keys nil)
-(setq slime-*directory* "/usr/wiss/moesenle/work/lisp/sbcl/site/slime")
-(if (file-readable-p "/usr/local/lehrstuhl/DIR/lisp/config-host/slime")
-  (load "/usr/local/lehrstuhl/DIR/lisp/config-host/slime"))
 
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
@@ -159,10 +153,10 @@
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
 ;; Some additional slime config
-(add-to-list 'load-path (concat slime-*directory* "contrib/"))
+;; (add-to-list 'load-path (concat slime-*directory* "contrib/"))
 
+(require 'slime)
 (slime-setup '(slime-fancy slime-asdf))
-;; (slime-highlight-edits-init)
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
 (setq slime-multiprocessing t)
@@ -180,14 +174,8 @@
     (define-key slime-mode-map "\r" 'newline-and-indent)
     (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
 
-(defvar *rpl-cmd-string* "(kibo) (in-package :kibo) (values)")
-;; Do autoload when pressing C-l
-(add-hook 'slime-rpl-connected-hook (lambda ()
-                                      (slime-repl-eval-string *rpl-cmd-string*)))
-
 ;; use internal w3m browser (used in particular for clhs lookup)
 (setq browse-url-browser-function 'w3m)
-
 ;; sbcl
 (defun sbcl ()
   "Inferior SBCL"
@@ -208,7 +196,7 @@
   (let ( (inferior-lisp-program "/usr/wiss/moesenle/work/ros/scripts/sbcl-ros.sh") )
     (slime)))
 
-(global-set-key "\C-cl" 'acl-rpl)
+(global-set-key "\C-cl" 'sbcl-dev)
 (global-set-key "\C-cf"
                 '(lambda ()
                   (interactive)
