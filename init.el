@@ -4,7 +4,6 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/emacs-color-themes")
 (add-to-list 'load-path "~/local/private/all/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/site")
-;(add-to-list 'load-path "~/work/list/sbcl/site/slime-2.0-cvs")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -162,8 +161,8 @@
     ;;(put 'defclass 'common-lisp-indent-function '(6 4 (&whole 2 &rest 1) (&whole 2 &rest 1)))
     (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
 
-    (slime-define-key "\r" 'newline-and-indent)
-    (slime-define-key [tab] 'slime-fuzzy-indent-and-complete-symbol)))
+    (define-key slime-mode-map "\r" 'newline-and-indent)
+    (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
 
 ;; Do autoload when pressing C-l
 (add-hook 'slime-rpl-connected-hook (lambda ()
