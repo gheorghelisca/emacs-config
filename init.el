@@ -1,7 +1,6 @@
 ;-*-Mode:Emacs-Lisp-*-
 
 ;; Public emacs site
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/emacs-color-themes")
 (add-to-list 'load-path "~/local/private/all/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/site")
 
@@ -67,8 +66,8 @@
  '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
  '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
 
-(require 'color-theme)
-(color-theme-hober)
+;;(require 'color-theme)
+;;(color-theme-hober)
 ;; The color theme seems to overwrite some face configurations.
 ;; We set them manually
 (set-face-foreground 'secondary-selection "black")
@@ -221,6 +220,8 @@
 
 ;; Load cool git frontend
 (require 'magit)
+;; For partial file commits
+(require 'gitsum)
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
@@ -231,7 +232,7 @@
 ;; ;; delete whitespaces and lines > 1 at end of file before saving
 ;; (add-hook 'write-file-hooks 'nuke-trailing-whitespace)
 
-(whitespace-global-mode)
+;;(whitespace-global-mode)
 
 (defun mutt ()
   (interactive)
