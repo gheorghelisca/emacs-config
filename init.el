@@ -135,7 +135,13 @@
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
 ;; SHIFT-Arrow for moving through windows
-(windmove-default-keybindings)
+(require 'windmove)
+;; (windmove-default-keybindings)
+(setq windmove-wrap-around t)
+(global-set-key "\M-\S-n" 'windmove-down)
+(global-set-key "\M-\S-p" 'windmove-up)
+(global-set-key "\M-\S-f" 'windmove-right)
+(global-set-key "\M-\S-b" 'windmove-left)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
