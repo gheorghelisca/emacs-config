@@ -225,9 +225,7 @@
 ;;(setq flyspell-default-dictionary "american")
 
 ;; Load cool git frontend
-(require 'magit)
-;; For partial file commits
-(require 'gitsum)
+(require 'egg)
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
@@ -244,3 +242,5 @@
   (interactive)
   (cd "~")
   (ansi-term "/usr/bin/mutt" "mutt"))
+
+(put 'upcase-region 'disabled nil)
