@@ -63,10 +63,15 @@ See http://www.mutt.org/doc/manual/manual-4.html#query for more information.")
 
 (defun external-abook-strip (elements)
   (mapcar (lambda (s) (replace-regexp-in-string "[ \t]+$" "" s)) elements))
+
 (defun external-abook-make-string (address)
   "Create a valid email address string from the given address."
-  (if (null address) nil
-    (apply 'format "%s <%s>" address)))
+  (cond ((null address)
+         nil)
+        ((eql (length address) 1)
+         (format "%s" (car address)))
+        (t
+         (apply 'format "%s <%s>" address))))
 
 (defun external-abook-completing-read (message choices)
   "Call ido-completing-read if available."
