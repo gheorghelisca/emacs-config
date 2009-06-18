@@ -178,11 +178,6 @@
 ;; use internal w3m browser (used in particular for clhs lookup)
 (setq browse-url-browser-function 'w3m)
 
-(defun ccrl-yarp ()
-  (interactive)
-  (let ((*rpl-cmd-string* "(ccrl-yarp) (in-package :kibo)"))
-    (acl-rpl)))
-
 ;; sbcl
 (defun sbcl ()
   "Inferior SBCL"
