@@ -170,12 +170,18 @@
     (define-key slime-mode-map "\r" 'newline-and-indent)
     (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
 
+(defvar *rpl-cmd-string* "(kibo) (in-package :kibo) (values)")
 ;; Do autoload when pressing C-l
 (add-hook 'slime-rpl-connected-hook (lambda ()
-                                      (slime-repl-eval-string "(kibo) (in-package :kibo) (values)")))
+                                      (slime-repl-eval-string *rpl-cmd-string*)))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
 (setq browse-url-browser-function 'w3m)
+
+(defun ccrl-yarp ()
+  (interactive)
+  (let ((*rpl-cmd-string* "(ccrl-yarp) (in-package :kibo)"))
+    (acl-rpl)))
 
 ;; sbcl
 (defun sbcl ()
@@ -230,6 +236,10 @@
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
+
+;; winner-mode to remember window config
+(require 'winner)
+(winner-mode)
 
 ;; ;; delete trailing whitespaces in all lines before saving
 ;; (add-hook 'write-file-hooks 'delete-trailing-whitespace)
