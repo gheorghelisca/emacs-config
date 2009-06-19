@@ -236,6 +236,10 @@
 (require 'winner)
 (winner-mode)
 
+;; numbered windows
+(require 'window-number)
+(window-number-mode)
+
 ;; ;; delete trailing whitespaces in all lines before saving
 ;; (add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
