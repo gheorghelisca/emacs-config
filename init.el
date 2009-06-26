@@ -64,6 +64,8 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :family "adobe-courier"))))
+ '(font-latex-subscript-face ((t nil)))
+ '(font-latex-superscript-face ((t nil)))
  '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
  '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
 
@@ -189,7 +191,13 @@
 (defun sbcl-dev ()
   "Inferior SBCL"
   (interactive)
-  (let ( (inferior-lisp-program "/bin/sh /usr/wiss/moesenle/local/sources/lenny-amd64/private/sbcl/run-sbcl.sh") )
+  (let ( (inferior-lisp-program "sbcl") )
+    (slime)))
+
+(defun sbcl-ros ()
+  "Inferior SBCL, in ROS environment."
+  (interactive)
+  (let ( (inferior-lisp-program "/usr/wiss/moesenle/work/ros/scripts/sbcl-ros.sh") )
     (slime)))
 
 (global-set-key "\C-cl" 'acl-rpl)
