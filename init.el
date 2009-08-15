@@ -34,8 +34,7 @@
  '(c-basic-offset (quote set-from-style))
  '(column-number-mode t)
  '(compilation-scroll-output t)
- '(compile-command "make ")
- '(desktop-save-mode t)
+ '(compile-command "make")
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
@@ -70,8 +69,8 @@
  '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
  '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
 
-;;(require 'color-theme)
-;;(color-theme-hober)
+(require 'color-theme)
+(color-theme-hober)
 ;; The color theme seems to overwrite some face configurations.
 ;; We set them manually
 (set-face-foreground 'secondary-selection "black")
@@ -193,7 +192,7 @@
 (defun sbcl-ros ()
   "Inferior SBCL, in ROS environment."
   (interactive)
-  (let ( (inferior-lisp-program "/usr/wiss/moesenle/work/ros/scripts/sbcl-ros.sh") )
+  (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
     (slime)))
 
 (global-set-key "\C-cl" 'sbcl-dev)
