@@ -277,3 +277,8 @@
 (require 'rosemacs)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
+
+;; kill-ring <-> x11
+(setq x-select-enable-clipboard t)
+(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
