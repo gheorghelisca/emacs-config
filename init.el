@@ -36,15 +36,19 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
+ '(desktop-save-mode t)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
  '(ispell-local-dictionary "american")
+ '(kept-new-versions 3)
+ '(kept-old-versions 3)
  '(line-number-mode t)
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
@@ -57,6 +61,7 @@
  '(safe-local-variable-values (quote ((readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
+ '(version-control t)
  '(view-diary-entries-initially t)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
