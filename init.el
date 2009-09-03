@@ -94,7 +94,7 @@
                 ("\\.i$"       . c++-mode)
                 ("\\.ii$"      . c++-mode)
                 ("\\.m$"       . objc-mode)
-                ("\\.pl$"      . perl-mode)
+                ("\\.pl$"      . prolog-mode)
                 ("\\.sql$"     . c-mode)
                 ("\\.sh$"      . shell-script-mode)
                 ("\\.mak$"     . makefile-mode)
