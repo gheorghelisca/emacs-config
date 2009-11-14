@@ -1,17 +1,14 @@
 ;-*-Mode:Emacs-Lisp-*-
 
 ;; Public emacs site
-(add-to-list 'load-path "~/local/private/all/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/site")
+(add-to-list 'load-path "~/work/lisp/site/slime")
 
 ;; start emacs server for emacsclient
 (server-start)
 
 ;; slime
-(setq slime-bind-keys nil)
-(setq slime-*directory* "/usr/wiss/moesenle/work/lisp/sbcl/site/slime")
-(if (file-readable-p "/usr/local/lehrstuhl/DIR/lisp/config-host/slime")
-  (load "/usr/local/lehrstuhl/DIR/lisp/config-host/slime"))
+(require 'slime)
 
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
@@ -44,6 +41,7 @@
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
+ '(indent-tabs-mode nil)
  '(ispell-local-dictionary "american")
  '(line-number-mode t)
  '(load-home-init-file t t)
@@ -120,7 +118,6 @@
 (setq scroll-step 1)
 (setq scroll-conservatively 5)
 (global-font-lock-mode t)               ;colorize all buffers
-(setq-default indent-tabs-mode nil)
 
 ;; Search highlighting
 ;; highlight during query
@@ -153,9 +150,6 @@
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
-;; Some additional slime config
-(add-to-list 'load-path (concat slime-*directory* "contrib/"))
-
 (slime-setup '(slime-fancy slime-asdf))
 ;; (slime-highlight-edits-init)
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
@@ -163,22 +157,11 @@
 (setq slime-multiprocessing t)
 (add-hook 'slime-mode-hook
   (lambda ()
-    ;;; adjust lisp indentation
-    ;;(set-variable lisp-indent-function 'common-lisp-indent-function)
-    ;;(put 'if 'common-lisp-indent-function '(2 &rest 2))
-    ;;(put 'cond 'common-lisp-indent-function '(&rest (&whole 2 &rest 2)))
-    ;;(put 'let  'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
-    ;;(put 'let* 'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
-    ;;(put 'defclass 'common-lisp-indent-function '(6 4 (&whole 2 &rest 1) (&whole 2 &rest 1)))
     (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+    (put 'with-failure-handling 'common-lisp-indent-function '((&whole 4 &rest (&whole 1 1 2)) &body))
 
     (define-key slime-mode-map "\r" 'newline-and-indent)
     (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
-
-(defvar *rpl-cmd-string* "(kibo) (in-package :kibo) (values)")
-;; Do autoload when pressing C-l
-(add-hook 'slime-rpl-connected-hook (lambda ()
-                                      (slime-repl-eval-string *rpl-cmd-string*)))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
 (setq browse-url-browser-function 'w3m)
@@ -200,10 +183,10 @@
 (defun sbcl-ros ()
   "Inferior SBCL, in ROS environment."
   (interactive)
-  (let ( (inferior-lisp-program "/usr/wiss/moesenle/work/ros/scripts/sbcl-ros.sh") )
+  (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
     (slime)))
 
-(global-set-key "\C-cl" 'acl-rpl)
+(global-set-key "\C-cl" 'sbcl-dev)
 (global-set-key "\C-cf"
                 '(lambda ()
                   (interactive)
