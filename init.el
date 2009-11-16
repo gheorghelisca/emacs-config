@@ -36,12 +36,13 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(TeX-PDF-mode t)
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
- '(desktop-save-mode t)
+ '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
@@ -58,7 +59,7 @@
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(safe-local-variable-values (quote ((readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
  '(version-control t)
@@ -90,7 +91,6 @@
 (autoload 'objc-mode "cc-mode" "Objective C Editing Mode" t)
 (autoload 'text-mode "indented-text-mode" "Indented Text Editing Mode" t)
 (autoload 'xrdb-mode "xrdb-mode" "Mode for editing X resource files" t)
-(autoload 'ps-mode "ps-mode" "Major mode for editing PostScript" t)
 (setq auto-mode-alist
       (append '(("\\.C$"       . c++-mode)
                 ("\\.cc$"      . c++-mode)
@@ -176,6 +176,7 @@
     ;;(put 'let* 'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
     ;;(put 'defclass 'common-lisp-indent-function '(6 4 (&whole 2 &rest 1) (&whole 2 &rest 1)))
     (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+    (put 'with-failure-handling 'common-lisp-indent-function '((&whole 4 &rest (&whole 1 1 2)) &body))
 
     (define-key slime-mode-map "\r" 'newline-and-indent)
     (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
@@ -186,7 +187,11 @@
                                       (slime-repl-eval-string *rpl-cmd-string*)))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
-(setq browse-url-browser-function 'w3m)
+(setq browse-url-browser-function (lambda (url &optional new-window)
+                                    (when (one-window-p)
+                                      (split-window))
+                                    (other-window 1)
+                                    (w3m url new-window nil)))
 
 ;; sbcl
 (defun sbcl ()
