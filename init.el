@@ -41,12 +41,13 @@
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
+ '(ido-enabled (quote both) t)
  '(indent-tabs-mode nil)
  '(ispell-local-dictionary "american")
  '(line-number-mode t)
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
- '(menu-bar-mode t)
+ '(menu-bar-mode nil)
  '(next-line-add-newlines nil)
  '(paren-mode (quote paren) nil (paren))
  '(pc-select-meta-moves-sexps t)
@@ -63,7 +64,6 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :family "adobe-courier"))))
  '(font-latex-subscript-face ((t nil)))
  '(font-latex-superscript-face ((t nil)))
  '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
@@ -74,9 +74,6 @@
 ;; The color theme seems to overwrite some face configurations.
 ;; We set them manually
 (set-face-foreground 'secondary-selection "black")
-
-;;; Set the right font for new frames
-(add-to-list 'default-frame-alist '(font . "-Adobe-Courier-Medium-R-Normal--12-120-75-75-M-70-ISO8859-1"))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -255,3 +252,23 @@
 (require 'rosemacs)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
+
+ 
+(defvar *current-tramp-path* nil)
+(defun connect-to-host (path)
+  (setq *current-tramp-path* path)
+  (setq slime-translate-from-lisp-filename-function
+    (lambda (f)
+      (concat *current-tramp-path* f)))
+  (setq slime-translate-to-lisp-filename-function
+    (lambda (f)
+      (substring f (length *current-tramp-path*))))
+  (slime-connect "localhost" 4005))
+ 
+(defun slime-leela ()
+  (interactive)
+  (connect-to-host "/ssh:demo@leela:"))
+ 
+(defun leela-homedir ()
+  (interactive)
+  (find-file (concat "/ssh:demo@leela:" "/home/demo/")))
