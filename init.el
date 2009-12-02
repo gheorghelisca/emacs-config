@@ -33,10 +33,13 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(TeX-PDF-mode t)
+ '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
+ '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
@@ -44,6 +47,8 @@
  '(ido-enabled (quote both) t)
  '(indent-tabs-mode nil)
  '(ispell-local-dictionary "american")
+ '(kept-new-versions 3)
+ '(kept-old-versions 3)
  '(line-number-mode t)
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
@@ -53,34 +58,19 @@
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(safe-local-variable-values (quote ((readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
+ '(version-control t)
  '(view-diary-entries-initially t)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(font-latex-subscript-face ((t nil)))
- '(font-latex-superscript-face ((t nil)))
- '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
- '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
-
-;;(require 'color-theme)
-;;(color-theme-hober)
-;; The color theme seems to overwrite some face configurations.
-;; We set them manually
-(set-face-foreground 'secondary-selection "black")
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
 (autoload 'objc-mode "cc-mode" "Objective C Editing Mode" t)
 (autoload 'text-mode "indented-text-mode" "Indented Text Editing Mode" t)
 (autoload 'xrdb-mode "xrdb-mode" "Mode for editing X resource files" t)
-(autoload 'ps-mode "ps-mode" "Major mode for editing PostScript" t)
 (setq auto-mode-alist
       (append '(("\\.C$"       . c++-mode)
                 ("\\.cc$"      . c++-mode)
@@ -89,7 +79,7 @@
                 ("\\.i$"       . c++-mode)
                 ("\\.ii$"      . c++-mode)
                 ("\\.m$"       . objc-mode)
-                ("\\.pl$"      . perl-mode)
+                ("\\.pl$"      . prolog-mode)
                 ("\\.sql$"     . c-mode)
                 ("\\.sh$"      . shell-script-mode)
                 ("\\.mak$"     . makefile-mode)
@@ -128,7 +118,7 @@
 
 ;; C/C++ indentation config
 (require 'cc-mode)
-(setq c-basic-offset 4)
+(setq c-basic-offset 2)
 (setq c-default-style
       '((java-mode . "java") (other . "ellemtel")))
 (setq c-offsets-alist '((arglist-cont-nonempty . +)))
@@ -142,6 +132,9 @@
 (global-set-key "\M-\S-p" 'windmove-up)
 (global-set-key "\M-\S-f" 'windmove-right)
 (global-set-key "\M-\S-b" 'windmove-left)
+
+(require 'ido)
+(ido-mode t)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
@@ -161,7 +154,11 @@
     (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
-(setq browse-url-browser-function 'w3m)
+(setq browse-url-browser-function (lambda (url &optional new-window)
+                                    (when (one-window-p)
+                                      (split-window))
+                                    (other-window 1)
+                                    (w3m url new-window nil)))
 
 ;; sbcl
 (defun sbcl ()
@@ -253,7 +250,6 @@
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
 
- 
 (defvar *current-tramp-path* nil)
 (defun connect-to-host (path)
   (setq *current-tramp-path* path)
@@ -272,3 +268,19 @@
 (defun leela-homedir ()
   (interactive)
   (find-file (concat "/ssh:demo@leela:" "/home/demo/")))
+
+;; kill-ring <-> x11
+(setq x-select-enable-clipboard t)
+(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :family "adobe-courier"))))
+ '(font-latex-subscript-face ((t nil)))
+ '(font-latex-superscript-face ((t nil)))
+ '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
+ '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
+
