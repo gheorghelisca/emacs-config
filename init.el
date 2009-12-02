@@ -53,7 +53,7 @@
  '(line-number-mode t)
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
- '(menu-bar-mode t)
+ '(menu-bar-mode nil)
  '(next-line-add-newlines nil)
  '(paren-mode (quote paren) nil (paren))
  '(pc-select-meta-moves-sexps t)
@@ -66,25 +66,6 @@
  '(view-diary-entries-initially t)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :family "adobe-courier"))))
- '(font-latex-subscript-face ((t nil)))
- '(font-latex-superscript-face ((t nil)))
- '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
- '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
-
-;;(require 'color-theme)
-;;(color-theme-hober)
-;; The color theme seems to overwrite some face configurations.
-;; We set them manually
-(set-face-foreground 'secondary-selection "black")
-
-;;; Set the right font for new frames
-(add-to-list 'default-frame-alist '(font . "-Adobe-Courier-Medium-R-Normal--12-120-75-75-M-70-ISO8859-1"))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -139,7 +120,7 @@
 
 ;; C/C++ indentation config
 (require 'cc-mode)
-(setq c-basic-offset 4)
+(setq c-basic-offset 2)
 (setq c-default-style
       '((java-mode . "java") (other . "ellemtel")))
 (setq c-offsets-alist '((arglist-cont-nonempty . +)))
@@ -153,6 +134,9 @@
 (global-set-key "\M-\S-p" 'windmove-up)
 (global-set-key "\M-\S-f" 'windmove-right)
 (global-set-key "\M-\S-b" 'windmove-left)
+
+(require 'ido)
+(ido-mode t)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
@@ -287,3 +271,13 @@
 (setq x-select-enable-clipboard t)
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :family "adobe-courier"))))
+ '(font-latex-subscript-face ((t nil)))
+ '(font-latex-superscript-face ((t nil)))
+ '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
+ '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
