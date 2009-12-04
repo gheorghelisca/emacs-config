@@ -25,8 +25,6 @@
 (global-unset-key "\C-z")
 (global-unset-key "\C-x\C-z")
 
-(ffap-bindings)
-
 (setq minibuffer-max-depth nil)
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -44,7 +42,8 @@
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
- '(ido-enabled (quote both) t)
+ '(ido-use-filename-at-point (quote guess))
+ '(ido-use-url-at-point t)
  '(indent-tabs-mode nil)
  '(ispell-local-dictionary "american")
  '(kept-new-versions 3)
@@ -112,9 +111,8 @@
 ;; highlight incremental search
 (setq search-highlight t)
 
-(require 'rect-mark)
-;;(setq woman-use-own-frame nil)     ; don't create new frame for manpages
-;;(setq woman-use-topic-at-point t)  ; don't prompt upon K key (manpage display)
+(require 'ido)
+(ido-mode 'both)
 
 ;; C/C++ indentation config
 (require 'cc-mode)
@@ -132,9 +130,6 @@
 (global-set-key "\M-\S-p" 'windmove-up)
 (global-set-key "\M-\S-f" 'windmove-right)
 (global-set-key "\M-\S-b" 'windmove-left)
-
-(require 'ido)
-(ido-mode t)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
@@ -278,9 +273,4 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 90 :width normal :family "adobe-courier"))))
- '(font-latex-subscript-face ((t nil)))
- '(font-latex-superscript-face ((t nil)))
- '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
- '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
-
+ )
