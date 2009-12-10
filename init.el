@@ -1,8 +1,7 @@
 ;-*-Mode:Emacs-Lisp-*-
 
-;; Public emacs site
-(add-to-list 'load-path "~/local/private/all/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/site")
+(add-to-list 'load-path "~/.emacs.d/site/org-mode")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -31,6 +30,7 @@
 (ffap-bindings)
 
 (setq minibuffer-max-depth nil)
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -42,6 +42,7 @@
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
+ '(delete-old-versions t)
  '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
@@ -60,6 +61,7 @@
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(standard-indent 2)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
  '(version-control t)
@@ -100,7 +102,7 @@
                 ("\\.launch"   . xml-mode)
                 ) auto-mode-alist))
 
-(setq default-tab-width 4)
+(setq default-tab-width 2)
 (setq initial-major-mode 'text-mode)
 (setq default-major-mode 'text-mode)
 (setq scroll-step 1)
@@ -281,3 +283,4 @@
  '(font-latex-superscript-face ((t nil)))
  '(secondary-selection ((t (:background "paleturquoise" :foreground "black"))))
  '(slime-highlight-edits-face ((((class color) (background dark)) (:background "gray15")))))
+
