@@ -7,6 +7,9 @@
 ;; start emacs server for emacsclient
 (server-start)
 
+;; slime
+(require 'slime)
+
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
 
@@ -22,33 +25,31 @@
 (global-unset-key "\C-z")
 (global-unset-key "\C-x\C-z")
 
-(ffap-bindings)
-
 (setq minibuffer-max-depth nil)
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(auto-fill-inhibit-list (quote (".*")))
+ '(TeX-PDF-mode t)
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
  '(column-number-mode t)
  '(compilation-scroll-output t)
- '(compile-command "make")
+ '(compile-command "make ")
+ '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
- '(ido-enabled (quote both) t)
- '(ido-everywhere nil)
- '(ido-mode (quote both) nil (ido))
+ '(ido-use-filename-at-point (quote guess))
+ '(ido-use-url-at-point t)
+ '(indent-tabs-mode nil)
  '(ispell-local-dictionary "american")
  '(kept-new-versions 3)
  '(kept-old-versions 3)
  '(line-number-mode t)
  '(load-home-init-file t t)
- '(longlines-auto-wrap nil)
  '(mark-diary-entries-in-calendar t)
  '(menu-bar-mode nil)
  '(next-line-add-newlines nil)
@@ -56,8 +57,7 @@
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(safe-local-variable-values (quote ((readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
- '(speedbar-frame-parameters (quote ((minibuffer) (width . 20) (border-width . 0) (menu-bar-lines . 0) (tool-bar-lines . 0) (unsplittable . t) (set-background-color "black"))))
+ '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
  '(version-control t)
@@ -70,7 +70,6 @@
 (autoload 'objc-mode "cc-mode" "Objective C Editing Mode" t)
 (autoload 'text-mode "indented-text-mode" "Indented Text Editing Mode" t)
 (autoload 'xrdb-mode "xrdb-mode" "Mode for editing X resource files" t)
-(autoload 'ps-mode "ps-mode" "Major mode for editing PostScript" t)
 (setq auto-mode-alist
       (append '(("\\.C$"       . c++-mode)
                 ("\\.cc$"      . c++-mode)
@@ -105,7 +104,6 @@
 (setq scroll-step 1)
 (setq scroll-conservatively 5)
 (global-font-lock-mode t)               ;colorize all buffers
-(setq-default indent-tabs-mode nil)
 
 ;; Search highlighting
 ;; highlight during query
@@ -113,13 +111,12 @@
 ;; highlight incremental search
 (setq search-highlight t)
 
-(require 'rect-mark)
-;;(setq woman-use-own-frame nil)     ; don't create new frame for manpages
-;;(setq woman-use-topic-at-point t)  ; don't prompt upon K key (manpage display)
+(require 'ido)
+(ido-mode 'both)
 
 ;; C/C++ indentation config
 (require 'cc-mode)
-(setq c-basic-offset 4)
+(setq c-basic-offset 2)
 (setq c-default-style
       '((java-mode . "java") (other . "ellemtel")))
 (setq c-offsets-alist '((arglist-cont-nonempty . +)))
@@ -138,30 +135,25 @@
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
-;; Some additional slime config
-;; (add-to-list 'load-path (concat slime-*directory* "contrib/"))
-
-(require 'slime)
 (slime-setup '(slime-fancy slime-asdf))
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
 (setq slime-multiprocessing t)
 (add-hook 'slime-mode-hook
   (lambda ()
-    ;;; adjust lisp indentation
-    ;;(set-variable lisp-indent-function 'common-lisp-indent-function)
-    ;;(put 'if 'common-lisp-indent-function '(2 &rest 2))
-    ;;(put 'cond 'common-lisp-indent-function '(&rest (&whole 2 &rest 2)))
-    ;;(put 'let  'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
-    ;;(put 'let* 'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
-    ;;(put 'defclass 'common-lisp-indent-function '(6 4 (&whole 2 &rest 1) (&whole 2 &rest 1)))
     (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+    (put 'with-failure-handling 'common-lisp-indent-function '((&whole 4 &rest (&whole 1 1 2)) &body))
 
     (define-key slime-mode-map "\r" 'newline-and-indent)
     (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
-(setq browse-url-browser-function 'w3m)
+(setq browse-url-browser-function (lambda (url &optional new-window)
+                                    (when (one-window-p)
+                                      (split-window))
+                                    (other-window 1)
+                                    (w3m url new-window nil)))
+
 ;; sbcl
 (defun sbcl ()
   "Inferior SBCL"
@@ -261,34 +253,4 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(background "blue")
- '(font-lock-builtin-face ((((class color) (background dark)) (:foreground "Turquoise"))))
- '(font-lock-comment-face ((t (:foreground "MediumAquamarine"))))
- '(font-lock-constant-face ((((class color) (background dark)) (:bold t :foreground "DarkOrchid"))))
- '(font-lock-doc-string-face ((t (:foreground "green2"))))
- '(font-lock-function-name-face ((t (:foreground "SkyBlue"))))
- '(font-lock-keyword-face ((t (:bold t :foreground "CornflowerBlue"))))
- '(font-lock-preprocessor-face ((t (:italic nil :foreground "CornFlowerBlue"))))
- '(font-lock-reference-face ((t (:foreground "DodgerBlue"))))
- '(font-lock-string-face ((t (:foreground "LimeGreen"))))
- '(font-lock-type-face ((t (:foreground "#9290ff"))))
- '(font-lock-variable-name-face ((t (:foreground "PaleGreen"))))
- '(font-lock-warning-face ((((class color) (background dark)) (:foreground "yellow" :background "red"))))
- '(highlight ((t (:background "CornflowerBlue"))))
- '(list-mode-item-selected ((t (:background "gold"))))
- '(makefile-space-face ((t (:background "wheat"))))
- '(mode-line ((t (:background "Navy"))))
- '(paren-match ((t (:background "darkseagreen4"))))
- '(region ((t (:background "DarkSlateBlue"))))
- '(show-paren-match ((t (:foreground "black" :background "wheat"))))
- '(show-paren-mismatch ((((class color)) (:foreground "white" :background "red"))))
- '(speedbar-button-face ((((class color) (background dark)) (:foreground "green4"))))
- '(speedbar-directory-face ((((class color) (background dark)) (:foreground "khaki"))))
- '(speedbar-file-face ((((class color) (background dark)) (:foreground "cyan"))))
- '(speedbar-tag-face ((((class color) (background dark)) (:foreground "Springgreen"))))
- '(vhdl-speedbar-architecture-selected-face ((((class color) (background dark)) (:underline t :foreground "Blue"))))
- '(vhdl-speedbar-entity-face ((((class color) (background dark)) (:foreground "darkGreen"))))
- '(vhdl-speedbar-entity-selected-face ((((class color) (background dark)) (:underline t :foreground "darkGreen"))))
- '(vhdl-speedbar-package-face ((((class color) (background dark)) (:foreground "black"))))
- '(vhdl-speedbar-package-selected-face ((((class color) (background dark)) (:underline t :foreground "black"))))
- '(widget-field ((((class grayscale color) (background light)) (:background "DarkBlue")))))
+ )
