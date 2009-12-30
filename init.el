@@ -2,6 +2,7 @@
 
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
+(add-to-list 'load-path "~/.emacs.d/site/org-mode")
 (add-to-list 'load-path "~/work/lisp/site/slime")
 
 ;; start emacs server for emacsclient
@@ -267,6 +268,9 @@
 ;; kill-ring <-> x11
 (setq x-select-enable-clipboard t)
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
+(require 'org)
+(setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
