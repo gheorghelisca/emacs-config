@@ -72,6 +72,7 @@
  '(transient-mark-mode t)
  '(version-control t)
  '(view-diary-entries-initially t)
+ '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
 
@@ -146,7 +147,6 @@
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
 (slime-setup '(slime-fancy slime-asdf))
-;; (slime-highlight-edits-init)
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
 (setq slime-multiprocessing t)
@@ -254,25 +254,6 @@
 (require 'rosemacs)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
-
-(defvar *current-tramp-path* nil)
-(defun connect-to-host (path)
-  (setq *current-tramp-path* path)
-  (setq slime-translate-from-lisp-filename-function
-    (lambda (f)
-      (concat *current-tramp-path* f)))
-  (setq slime-translate-to-lisp-filename-function
-    (lambda (f)
-      (substring f (length *current-tramp-path*))))
-  (slime-connect "localhost" 4005))
- 
-(defun slime-leela ()
-  (interactive)
-  (connect-to-host "/ssh:demo@leela:"))
- 
-(defun leela-homedir ()
-  (interactive)
-  (find-file (concat "/ssh:demo@leela:" "/home/demo/")))
 
 ;; kill-ring <-> x11
 (setq x-select-enable-clipboard t)
