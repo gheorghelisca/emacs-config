@@ -58,6 +58,9 @@
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
+ '(py-imenu-show-method-args-p t)
+ '(python-mode-hook (quote (turn-on-eldoc-mode ropemacs-mode)) t)
+ '(python-use-skeletons t)
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
@@ -271,6 +274,10 @@
 
 (require 'org)
 (setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
+
+;; Python stuff
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
