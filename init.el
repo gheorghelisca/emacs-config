@@ -43,11 +43,19 @@
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
  '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
+ '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pyflakes-init))))
+ '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
+ '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
+ '(icomplete-prospects-height 3)
+ '(ido-completion-buffer-all-completions t)
  '(ido-default-buffer-method (quote selected-window))
+ '(ido-enable-dot-prefix t)
  '(ido-enable-flex-matching t)
  '(ido-enabled (quote both) t)
  '(ido-everywhere t)
+ '(ido-max-window-height 5)
+ '(ido-read-file-name-as-directory-commands (quote (find-dired)))
  '(ido-show-dot-for-dired t)
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point t)
@@ -65,8 +73,6 @@
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
  '(py-imenu-show-method-args-p t)
- '(python-mode-hook (quote (turn-on-eldoc-mode ropemacs-mode)) t)
- '(python-use-skeletons t)
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
@@ -220,7 +226,7 @@
 ;;(setq flyspell-default-dictionary "american")
 
 ;; Load cool git frontend
-(require 'egg)
+;; (require 'egg)
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
@@ -265,6 +271,14 @@
 ;; Python stuff
 (require 'pymacs)
 (pymacs-load "ropemacs" "rope-")
+
+(defun flymake-pyflakes-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "pyflakes" (list local-file))))
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
