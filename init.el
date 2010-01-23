@@ -46,8 +46,12 @@
  '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
- '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
+ '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
+ '(gud-tooltip-mode t)
+ '(ido-default-buffer-method (quote samewindow))
+ '(ido-default-file-method (quote samewindow))
+ '(ido-show-dot-for-dired t)
  '(ispell-local-dictionary "american")
  '(kept-new-versions 3)
  '(kept-old-versions 3)
@@ -147,25 +151,50 @@
 ;; Some additional slime config
 (add-to-list 'load-path (concat slime-*directory* "contrib/"))
 
-(slime-setup '(slime-fancy slime-asdf))
+(slime-setup '(slime-fancy slime-asdf slime-indentation))
 ;; (slime-highlight-edits-init)
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
 (setq slime-multiprocessing t)
-(add-hook 'slime-mode-hook
-  (lambda ()
-    ;;; adjust lisp indentation
-    ;;(set-variable lisp-indent-function 'common-lisp-indent-function)
-    ;;(put 'if 'common-lisp-indent-function '(2 &rest 2))
-    ;;(put 'cond 'common-lisp-indent-function '(&rest (&whole 2 &rest 2)))
-    ;;(put 'let  'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
-    ;;(put 'let* 'common-lisp-indent-function '((&whole 4 &rest (&whole 2 1 2)) &body))
-    ;;(put 'defclass 'common-lisp-indent-function '(6 4 (&whole 2 &rest 1) (&whole 2 &rest 1)))
-    (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
-    (put 'with-failure-handling 'common-lisp-indent-function '((&whole 4 &rest (&whole 1 1 2)) &body))
 
-    (define-key slime-mode-map "\r" 'newline-and-indent)
-    (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
+;;; adjust lisp indentation
+(put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+
+(define-key slime-mode-map "\r" 'newline-and-indent)
+(define-key slime-mode-map [tab] (lambda ()
+                                   (interactive)
+                                   (unless (yas/expand)
+                                     (slime-fuzzy-indent-and-complete-symbol))))
+
+(define-key slime-mode-map (kbd "M-,")
+  (lambda ()
+    (interactive)
+    (condition-case nil
+        (slime-pop-find-definition-stack)
+      (error (tags-loop-continue)))))
+
+(define-key lisp-mode-map (kbd "M-a") 
+  (lambda ()
+    (interactive)
+    (let ((ppss (syntax-ppss)))
+      (if (nth 3 ppss)
+          (goto-char (1+ (nth 8 ppss)))
+        (progn
+          (backward-up-list 1)
+          (down-list 1))))))
+
+(define-key lisp-mode-map (kbd "M-e") 
+  (lambda ()
+    (interactive)
+    (let ((ppss (syntax-ppss)))
+      (if (nth 3 ppss)
+          (progn
+            (goto-char (nth 8 ppss))
+            (forward-sexp 1)
+            (backward-char 1))
+        (progn
+          (up-list 1)
+          (backward-down-list 1))))))
 
 (defvar *rpl-cmd-string* "(kibo) (in-package :kibo) (values)")
 ;; Do autoload when pressing C-l
@@ -233,9 +262,6 @@
 
 ;;(setq flyspell-default-dictionary "american")
 
-;; Load cool git frontend
-(require 'egg)
-
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
 
@@ -272,6 +298,13 @@
 ;; kill-ring <-> x11
 (setq x-select-enable-clipboard t)
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
+(require 'org)
+(setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
+
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets")
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
