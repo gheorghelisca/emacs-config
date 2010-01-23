@@ -27,6 +27,7 @@
 (global-unset-key "\C-x\C-z")
 
 (setq minibuffer-max-depth nil)
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -42,7 +43,6 @@
  '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
- '(egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff) (egg-commit-buffer-mode . :diff))))
  '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pyflakes-init))))
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
  '(gdb-many-windows t)
@@ -50,6 +50,7 @@
  '(icomplete-prospects-height 3)
  '(ido-completion-buffer-all-completions t)
  '(ido-default-buffer-method (quote selected-window))
+ '(ido-default-file-method (quote samewindow))
  '(ido-enable-dot-prefix t)
  '(ido-enable-flex-matching t)
  '(ido-enabled (quote both) t)
@@ -60,6 +61,7 @@
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point t)
  '(indent-tabs-mode nil)
+ '(gud-tooltip-mode t)
  '(ispell-local-dictionary "american")
  '(kept-new-versions 3)
  '(kept-old-versions 3)
@@ -74,6 +76,7 @@
  '(pc-selection-mode t nil (pc-select))
  '(py-imenu-show-method-args-p t)
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(standard-indent 2)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
  '(version-control t)
@@ -115,7 +118,7 @@
                 ("\\.launch"   . xml-mode)
                 ) auto-mode-alist))
 
-(setq default-tab-width 4)
+(setq default-tab-width 2)
 (setq initial-major-mode 'text-mode)
 (setq default-major-mode 'text-mode)
 (setq scroll-step 1)
@@ -152,17 +155,49 @@
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
-(slime-setup '(slime-fancy slime-asdf))
+(slime-setup '(slime-fancy slime-asdf slime-indentation))
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
 (setq slime-multiprocessing t)
-(add-hook 'slime-mode-hook
-  (lambda ()
-    (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
-    (put 'with-failure-handling 'common-lisp-indent-function '((&whole 4 &rest (&whole 1 1 2)) &body))
 
-    (define-key slime-mode-map "\r" 'newline-and-indent)
-    (define-key slime-mode-map [tab] 'slime-fuzzy-indent-and-complete-symbol)))
+;;; adjust lisp indentation
+(put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+
+(define-key slime-mode-map "\r" 'newline-and-indent)
+(define-key slime-mode-map [tab] (lambda ()
+                                   (interactive)
+                                   (unless (yas/expand)
+                                     (slime-fuzzy-indent-and-complete-symbol))))
+
+(define-key slime-mode-map (kbd "M-,")
+  (lambda ()
+    (interactive)
+    (condition-case nil
+        (slime-pop-find-definition-stack)
+      (error (tags-loop-continue)))))
+
+(define-key lisp-mode-map (kbd "M-a") 
+  (lambda ()
+    (interactive)
+    (let ((ppss (syntax-ppss)))
+      (if (nth 3 ppss)
+          (goto-char (1+ (nth 8 ppss)))
+        (progn
+          (backward-up-list 1)
+          (down-list 1))))))
+
+(define-key lisp-mode-map (kbd "M-e") 
+  (lambda ()
+    (interactive)
+    (let ((ppss (syntax-ppss)))
+      (if (nth 3 ppss)
+          (progn
+            (goto-char (nth 8 ppss))
+            (forward-sexp 1)
+            (backward-char 1))
+        (progn
+          (up-list 1)
+          (backward-down-list 1))))))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
 (setq browse-url-browser-function (lambda (url &optional new-window)
@@ -225,9 +260,6 @@
 
 ;;(setq flyspell-default-dictionary "american")
 
-;; Load cool git frontend
-;; (require 'egg)
-
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
 
@@ -279,6 +311,10 @@
                       temp-file
                       (file-name-directory buffer-file-name))))
     (list "pyflakes" (list local-file))))
+
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets")
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
