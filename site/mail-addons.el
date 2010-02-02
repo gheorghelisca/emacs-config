@@ -2,6 +2,7 @@
 (require 'ldap)
 (require 'eudc)
 (require 'external-abook)
+(require 'post)
 
 (setq external-abook-command "~/.mutt/mutt-addresses-search '%s'")
 

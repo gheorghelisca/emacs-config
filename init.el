@@ -3,7 +3,7 @@
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/site/org-mode")
-(add-to-list 'load-path "~/work/lisp/site/slime")
+(add-to-list 'load-path "~/work/lisp/sbcl/site/slime")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -13,6 +13,9 @@
 
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
+(add-hook 'post-mode-hook (lambda ()
+                            (interactive)
+                            (set-buffer-file-coding-system 'raw-text)))
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -47,6 +50,7 @@
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
  '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
+ '(gud-tooltip-mode t)
  '(icomplete-prospects-height 3)
  '(ido-completion-buffer-all-completions t)
  '(ido-default-buffer-method (quote selected-window))
@@ -61,7 +65,6 @@
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point t)
  '(indent-tabs-mode nil)
- '(gud-tooltip-mode t)
  '(ispell-local-dictionary "american")
  '(kept-new-versions 3)
  '(kept-old-versions 3)
@@ -74,6 +77,7 @@
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
+ '(post-email-address "moesenle@in.tum.de")
  '(py-imenu-show-method-args-p t)
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(standard-indent 2)
