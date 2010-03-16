@@ -230,7 +230,7 @@
   (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
     (slime)))
 
-(global-set-key "\C-cl" 'sbcl-dev)
+(global-set-key "\C-cl" 'sbcl-ros)
 (global-set-key "\C-cf"
                 '(lambda ()
                   (interactive)
@@ -254,15 +254,15 @@
 ;; Load auctex
 (load "auctex")
 
+;; M-u and M-l
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 ;; Flyspell mode
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
-
-;;(setq flyspell-default-dictionary "american")
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
@@ -274,21 +274,6 @@
 ;; numbered windows
 (require 'window-number)
 (window-number-mode)
-
-;; ;; delete trailing whitespaces in all lines before saving
-;; (add-hook 'write-file-hooks 'delete-trailing-whitespace)
-
-;; ;; delete whitespaces and lines > 1 at end of file before saving
-;; (add-hook 'write-file-hooks 'nuke-trailing-whitespace)
-
-;;(whitespace-global-mode)
-
-(defun mutt ()
-  (interactive)
-  (cd "~")
-  (ansi-term "/usr/bin/mutt" "mutt"))
-
-(put 'upcase-region 'disabled nil)
 
 ;; Load rosemacs
 (add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
