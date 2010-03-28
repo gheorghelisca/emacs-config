@@ -3,19 +3,22 @@
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/site/org-mode")
-(add-to-list 'load-path "~/work/lisp/sbcl/site/slime")
+(add-to-list 'load-path "~/work/lisp/site/slime")
 
 ;; start emacs server for emacsclient
 (server-start)
 
+(require 'cl)
+
 ;; slime
-(require 'slime)
+(ignore-errors (require 'slime))
 
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
-(require 'mail-addons)
-(add-hook 'post-mode-hook (lambda ()
-                            (interactive)
-                            (set-buffer-file-coding-system 'raw-text)))
+(ignore-errors
+  (require 'mail-addons)
+  (add-hook 'post-mode-hook (lambda ()
+                              (interactive)
+                              (set-buffer-file-coding-system 'raw-text))))
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -143,7 +146,9 @@
 (setq c-basic-offset 2)
 (setq c-default-style
       '((java-mode . "java") (other . "ellemtel")))
-(setq c-offsets-alist '((arglist-cont-nonempty . +)))
+(setq c-offsets-alist '((arglist-cont-nonempty . +)
+                        (substatement-open . 0)
+                        (innamespace . 0)))
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
 ;; SHIFT-Arrow for moving through windows
@@ -155,95 +160,92 @@
 (global-set-key "\M-\S-f" 'windmove-right)
 (global-set-key "\M-\S-b" 'windmove-left)
 
-;; [ and ] should be handled paranthesis-like in lisp files.
-(modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
-(modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
+(ignore-errors
+  (slime-setup '(slime-fancy slime-asdf slime-indentation))
+  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
-(slime-setup '(slime-fancy slime-asdf slime-indentation))
-(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-
-(setq slime-multiprocessing t)
+  (setq slime-multiprocessing t)
 
 ;;; adjust lisp indentation
-(put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+  (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
 
-(define-key slime-mode-map "\r" 'newline-and-indent)
-(define-key slime-mode-map [tab] (lambda ()
-                                   (interactive)
-                                   (unless (yas/expand)
-                                     (slime-fuzzy-indent-and-complete-symbol))))
+  (define-key slime-mode-map "\r" 'newline-and-indent)
+  (define-key slime-mode-map [tab] (lambda ()
+                                     (interactive)
+                                     (unless (yas/expand)
+                                       (slime-fuzzy-indent-and-complete-symbol))))
 
-(define-key slime-mode-map (kbd "M-,")
-  (lambda ()
-    (interactive)
-    (condition-case nil
-        (slime-pop-find-definition-stack)
-      (error (tags-loop-continue)))))
+  (define-key slime-mode-map (kbd "M-,")
+    (lambda ()
+      (interactive)
+      (condition-case nil
+          (slime-pop-find-definition-stack)
+        (error (tags-loop-continue)))))
 
-(define-key lisp-mode-map (kbd "M-a") 
-  (lambda ()
-    (interactive)
-    (let ((ppss (syntax-ppss)))
-      (if (nth 3 ppss)
-          (goto-char (1+ (nth 8 ppss)))
-        (progn
-          (backward-up-list 1)
-          (down-list 1))))))
-
-(define-key lisp-mode-map (kbd "M-e") 
-  (lambda ()
-    (interactive)
-    (let ((ppss (syntax-ppss)))
-      (if (nth 3 ppss)
+  (define-key lisp-mode-map (kbd "M-a") 
+    (lambda ()
+      (interactive)
+      (let ((ppss (syntax-ppss)))
+        (if (nth 3 ppss)
+            (goto-char (1+ (nth 8 ppss)))
           (progn
-            (goto-char (nth 8 ppss))
-            (forward-sexp 1)
-            (backward-char 1))
-        (progn
-          (up-list 1)
-          (backward-down-list 1))))))
+            (backward-up-list 1)
+            (down-list 1))))))
+
+  (define-key lisp-mode-map (kbd "M-e") 
+    (lambda ()
+      (interactive)
+      (let ((ppss (syntax-ppss)))
+        (if (nth 3 ppss)
+            (progn
+              (goto-char (nth 8 ppss))
+              (forward-sexp 1)
+              (backward-char 1))
+          (progn
+            (up-list 1)
+            (backward-down-list 1))))))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
-(setq browse-url-browser-function (lambda (url &optional new-window)
-                                    (when (one-window-p)
-                                      (split-window))
-                                    (other-window 1)
-                                    (w3m url new-window nil)))
+  (setq browse-url-browser-function (lambda (url &optional new-window)
+                                      (when (one-window-p)
+                                        (split-window))
+                                      (other-window 1)
+                                      (w3m url new-window nil)))
 
 ;; sbcl
-(defun sbcl ()
-  "Inferior SBCL"
-  (interactive)
-  (let ( (inferior-lisp-program "/usr/bin/sbcl") )
-    (slime)))
+  (defun sbcl ()
+    "Inferior SBCL"
+    (interactive)
+    (let ((inferior-lisp-program "/usr/bin/sbcl"))
+      (slime)))
 
 ;; sbcl git dev version
-(defun sbcl-dev ()
-  "Inferior SBCL"
-  (interactive)
-  (let ( (inferior-lisp-program "sbcl") )
-    (slime)))
+  (defun sbcl-dev ()
+    "Inferior SBCL"
+    (interactive)
+    (let ((inferior-lisp-program "sbcl"))
+      (slime)))
 
-(defun sbcl-ros ()
-  "Inferior SBCL, in ROS environment."
-  (interactive)
-  (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
-    (slime)))
+  (defun sbcl-ros ()
+    "Inferior SBCL, in ROS environment."
+    (interactive)
+    (let ((inferior-lisp-program "/u/lorenz/work/ros/scripts/sbcl-ros.sh"))
+      (slime)))
 
-(global-set-key "\C-cl" 'sbcl-dev)
-(global-set-key "\C-cf"
-                '(lambda ()
-                  (interactive)
-                  (slime-quit-lisp)))
+  (global-set-key "\C-cl" 'sbcl-dev)
+  (global-set-key "\C-cf"
+                  '(lambda ()
+                     (interactive)
+                     (slime-quit-lisp)))
 
 ;; paredit mode
-(require 'paredit)
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (paredit-mode +1)))
-(add-hook 'lisp-mode-hook (lambda ()
-                            (paredit-mode +1)))
-(add-hook 'inferior-lisp-mode-hook (lambda ()
-                                     (paredit-mode +1)))
+  (require 'paredit)
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (paredit-mode +1)))
+  (add-hook 'lisp-mode-hook (lambda ()
+                              (paredit-mode +1)))
+  (add-hook 'inferior-lisp-mode-hook (lambda ()
+                                       (paredit-mode +1))))
 
 ;; Mouse wheel
 (autoload 'mwheel-install "mwheel" "Enable mouse wheel support.") (mwheel-install)
@@ -252,7 +254,8 @@
 (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -and -not -name \"*.tmp\" -print0 | xargs -0 -e grep -i -n -s -F ")
 
 ;; Load auctex
-(load "auctex")
+(ignore-errors
+  (load "auctex"))
 
 (put 'downcase-region 'disabled nil)
 
@@ -275,19 +278,6 @@
 (require 'window-number)
 (window-number-mode)
 
-;; ;; delete trailing whitespaces in all lines before saving
-;; (add-hook 'write-file-hooks 'delete-trailing-whitespace)
-
-;; ;; delete whitespaces and lines > 1 at end of file before saving
-;; (add-hook 'write-file-hooks 'nuke-trailing-whitespace)
-
-;;(whitespace-global-mode)
-
-(defun mutt ()
-  (interactive)
-  (cd "~")
-  (ansi-term "/usr/bin/mutt" "mutt"))
-
 (put 'upcase-region 'disabled nil)
 
 ;; Load rosemacs
@@ -305,20 +295,25 @@
 (setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
 
 ;; Python stuff
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+(ignore-errors
+  (require 'pymacs)
+  (pymacs-load "ropemacs" "rope-")
 
-(defun flymake-pyflakes-init ()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
+  (defun flymake-pyflakes-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "pyflakes" (list local-file))))
 
-(require 'yasnippet)
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets")
+  (require 'yasnippet)
+  (yas/initialize)
+  (yas/load-directory "~/.emacs.d/snippets"))
+
+
+;; Enable ansi colors for shell
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
