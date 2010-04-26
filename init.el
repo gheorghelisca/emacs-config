@@ -4,9 +4,13 @@
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/site/org-mode")
 (add-to-list 'load-path "~/work/lisp/site/slime")
+(add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
+(add-to-list 'load-path "/usr/share/doc/git-core/contrib/emacs")
 
 ;; start emacs server for emacsclient
 (server-start)
+
+(require 'git)
 
 (require 'cl)
 
@@ -75,6 +79,19 @@
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
  '(menu-bar-mode nil)
+ '(mode-line-format (quote ("%e" #("-" 0 1 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification #("   " 0 3 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-position (vc-mode vc-mode) #("  " 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-modes (:eval (ros-current-pkg-modeline-entry)) (which-func-mode ("" which-func-format #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")))) (global-mode-string (#("--" 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) global-mode-string)) #("-%-" 0 3 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")))))
  '(next-line-add-newlines nil)
  '(paren-mode (quote paren) nil (paren))
  '(pc-select-meta-moves-sexps t)
@@ -82,7 +99,9 @@
  '(pc-selection-mode t nil (pc-select))
  '(post-email-address "moesenle@in.tum.de")
  '(py-imenu-show-method-args-p t)
+ '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(slime-ros-completion-function (quote ido-completing-read))
  '(standard-indent 2)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
@@ -160,92 +179,91 @@
 (global-set-key "\M-\S-f" 'windmove-right)
 (global-set-key "\M-\S-b" 'windmove-left)
 
-(ignore-errors
-  (slime-setup '(slime-fancy slime-asdf slime-indentation))
-  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+(slime-setup '(slime-fancy slime-asdf slime-indentation slime-ros))
+(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
-  (setq slime-multiprocessing t)
+(setq slime-multiprocessing t)
 
 ;;; adjust lisp indentation
-  (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+(put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
 
-  (define-key slime-mode-map "\r" 'newline-and-indent)
-  (define-key slime-mode-map [tab] (lambda ()
-                                     (interactive)
-                                     (unless (yas/expand)
-                                       (slime-fuzzy-indent-and-complete-symbol))))
+(define-key slime-mode-map "\r" 'newline-and-indent)
+(define-key slime-mode-map [tab] (lambda ()
+                                   (interactive)
+                                   (unless (yas/expand)
+                                     (slime-fuzzy-indent-and-complete-symbol))))
 
-  (define-key slime-mode-map (kbd "M-,")
-    (lambda ()
-      (interactive)
-      (condition-case nil
-          (slime-pop-find-definition-stack)
-        (error (tags-loop-continue)))))
+(define-key slime-mode-map (kbd "M-,")
+  (lambda ()
+    (interactive)
+    (condition-case nil
+        (slime-pop-find-definition-stack)
+      (error (tags-loop-continue)))))
 
-  (define-key lisp-mode-map (kbd "M-a") 
-    (lambda ()
-      (interactive)
-      (let ((ppss (syntax-ppss)))
-        (if (nth 3 ppss)
-            (goto-char (1+ (nth 8 ppss)))
+(define-key lisp-mode-map (kbd "M-a") 
+  (lambda ()
+    (interactive)
+    (let ((ppss (syntax-ppss)))
+      (if (nth 3 ppss)
+          (goto-char (1+ (nth 8 ppss)))
+        (progn
+          (backward-up-list 1)
+          (down-list 1))))))
+
+(define-key lisp-mode-map (kbd "M-e") 
+  (lambda ()
+    (interactive)
+    (let ((ppss (syntax-ppss)))
+      (if (nth 3 ppss)
           (progn
-            (backward-up-list 1)
-            (down-list 1))))))
-
-  (define-key lisp-mode-map (kbd "M-e") 
-    (lambda ()
-      (interactive)
-      (let ((ppss (syntax-ppss)))
-        (if (nth 3 ppss)
-            (progn
-              (goto-char (nth 8 ppss))
-              (forward-sexp 1)
-              (backward-char 1))
-          (progn
-            (up-list 1)
-            (backward-down-list 1))))))
+            (goto-char (nth 8 ppss))
+            (forward-sexp 1)
+            (backward-char 1))
+        (progn
+          (up-list 1)
+          (backward-down-list 1))))))
 
 ;; use internal w3m browser (used in particular for clhs lookup)
-  (setq browse-url-browser-function (lambda (url &optional new-window)
-                                      (when (one-window-p)
-                                        (split-window))
-                                      (other-window 1)
-                                      (w3m url new-window nil)))
+(setq browse-url-browser-function (lambda (url &optional new-window)
+                                    (when (one-window-p)
+                                      (split-window))
+                                    (other-window 1)
+                                    (w3m url new-window nil)))
 
 ;; sbcl
-  (defun sbcl ()
-    "Inferior SBCL"
-    (interactive)
-    (let ((inferior-lisp-program "/usr/bin/sbcl"))
-      (slime)))
+(defun sbcl ()
+  "Inferior SBCL"
+  (interactive)
+  (let ((inferior-lisp-program "/usr/bin/sbcl"))
+    (slime)))
 
 ;; sbcl git dev version
-  (defun sbcl-dev ()
-    "Inferior SBCL"
-    (interactive)
-    (let ((inferior-lisp-program "sbcl"))
-      (slime)))
+(defun sbcl-dev ()
+  "Inferior SBCL"
+  (interactive)
+  (let ((inferior-lisp-program "sbcl"))
+    (slime)))
 
-  (defun sbcl-ros ()
-    "Inferior SBCL, in ROS environment."
-    (interactive)
-    (let ((inferior-lisp-program "/u/lorenz/work/ros/scripts/sbcl-ros.sh"))
-      (slime)))
+(defun sbcl-ros ()
+  "Inferior SBCL, in ROS environment."
+  (interactive)
+  (let ((inferior-lisp-program "/u/lorenz/work/ros/scripts/sbcl-ros.sh"))
+    (slime)))
 
-  (global-set-key "\C-cl" 'sbcl-dev)
-  (global-set-key "\C-cf"
-                  '(lambda ()
-                     (interactive)
-                     (slime-quit-lisp)))
+(global-set-key "\C-cl" 'sbcl-dev)
+(global-set-key "\C-cf"
+                '(lambda ()
+                   (interactive)
+                   (slime-quit-lisp)))
 
 ;; paredit mode
-  (require 'paredit)
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                    (paredit-mode +1)))
-  (add-hook 'lisp-mode-hook (lambda ()
-                              (paredit-mode +1)))
-  (add-hook 'inferior-lisp-mode-hook (lambda ()
-                                       (paredit-mode +1))))
+(require 'paredit)
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (paredit-mode +1)))
+(add-hook 'lisp-mode-hook (lambda ()
+                            (paredit-mode +1)))
+(add-hook 'inferior-lisp-mode-hook (lambda ()
+                                     (paredit-mode +1)))
 
 ;; Mouse wheel
 (autoload 'mwheel-install "mwheel" "Enable mouse wheel support.") (mwheel-install)
@@ -280,9 +298,6 @@
 
 (put 'upcase-region 'disabled nil)
 
-;; Load rosemacs
-(add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
-
 (require 'rosemacs)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
@@ -314,6 +329,11 @@
 
 ;; Enable ansi colors for shell
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+;; Toggle sticky setting for current window.
+(defun sticky-window ()
+  (interactive)
+  (set-window-dedicated-p (selected-window) (not  (window-dedicated-p (selected-window)))))
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
