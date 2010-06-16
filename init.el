@@ -4,6 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/site/org-mode")
 (add-to-list 'load-path "~/work/lisp/site/slime")
+(add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -13,6 +14,7 @@
 
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
+(require 'post)
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -47,6 +49,7 @@
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
  '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
+ '(gud-tooltip-mode t)
  '(icomplete-prospects-height 3)
  '(ido-completion-buffer-all-completions t)
  '(ido-default-buffer-method (quote selected-window))
@@ -61,7 +64,6 @@
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point t)
  '(indent-tabs-mode nil)
- '(gud-tooltip-mode t)
  '(ispell-local-dictionary "american")
  '(kept-new-versions 3)
  '(kept-old-versions 3)
@@ -69,13 +71,29 @@
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
  '(menu-bar-mode nil)
+ '(mode-line-format (quote ("%e" #("-" 0 1 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification #("   " 0 3 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-position (vc-mode vc-mode) #("  " 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-modes (:eval (ros-current-pkg-modeline-entry)) (which-func-mode ("" which-func-format #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")))) (global-mode-string (#("--" 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) global-mode-string)) #("-%-" 0 3 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")))))
  '(next-line-add-newlines nil)
  '(paren-mode (quote paren) nil (paren))
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
+ '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-0]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(py-imenu-show-method-args-p t)
+ '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(slime-ros-completion-function (quote ido-completing-read))
  '(standard-indent 2)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
@@ -155,7 +173,7 @@
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
-(slime-setup '(slime-fancy slime-asdf slime-indentation))
+(slime-setup '(slime-fancy slime-asdf slime-indentation slime-ros))
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
 (setq slime-multiprocessing t)
@@ -286,9 +304,6 @@
 
 (put 'upcase-region 'disabled nil)
 
-;; Load rosemacs
-(add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
-
 (require 'rosemacs)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
@@ -315,6 +330,8 @@
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
+
+(require 'inf-haskell)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
