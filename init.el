@@ -79,7 +79,9 @@
  '(pc-selection-mode t nil (pc-select))
  '(post-email-address "moesenle@in.tum.de")
  '(py-imenu-show-method-args-p t)
+ '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(slime-ros-completion-function (quote ido-completing-read))
  '(standard-indent 2)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
@@ -211,24 +213,24 @@
                                     (w3m url new-window nil)))
 
 ;; sbcl
-(defun sbcl ()
-  "Inferior SBCL"
-  (interactive)
-  (let ( (inferior-lisp-program "/usr/bin/sbcl") )
-    (slime)))
+;; (defun sbcl ()
+;;   "Inferior SBCL"
+;;   (interactive)
+;;   (let ( (inferior-lisp-program "/usr/bin/sbcl") )
+;;     (slime)))
 
-;; sbcl git dev version
-(defun sbcl-dev ()
-  "Inferior SBCL"
-  (interactive)
-  (let ( (inferior-lisp-program "sbcl") )
-    (slime)))
+;; ;; sbcl git dev version
+;; (defun sbcl-dev ()
+;;   "Inferior SBCL"
+;;   (interactive)
+;;   (let ( (inferior-lisp-program "sbcl") )
+;;     (slime)))
 
-(defun sbcl-ros ()
-  "Inferior SBCL, in ROS environment."
-  (interactive)
-  (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
-    (slime)))
+;; (defun sbcl-ros ()
+;;   "Inferior SBCL, in ROS environment."
+;;   (interactive)
+;;   (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
+;;     (slime)))
 
 (global-set-key "\C-cl" 'sbcl-ros)
 (global-set-key "\C-cf"
@@ -277,8 +279,8 @@
 
 ;; Load rosemacs
 (add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
-
 (require 'rosemacs)
+(require 'slime-ros)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
 

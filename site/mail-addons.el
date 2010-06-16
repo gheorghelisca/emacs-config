@@ -19,9 +19,6 @@
 (setq eudc-multiple-match-handling-method 'select)
 
 (setq ldap-host-parameters-alist
-;;       (quote (("ldap1.in.tum.de" base "ou=addressbook,dc=your_dc_here,dc=fr"
-;;                binddn "cn=admin,dc=your_dc_here,dc=fr"
-;;                passwd "your_password")))
       (quote (("ldap1.in.tum.de" base "ou=Personen,ou=IN,o=TUM,c=DE"
                binddn ""))))
 
