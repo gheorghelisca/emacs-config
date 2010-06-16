@@ -224,27 +224,7 @@ mouse-3: Remove current window from display")))))
                                     (other-window 1)
                                     (w3m url new-window nil)))
 
-;; sbcl
-(defun sbcl ()
-  "Inferior SBCL"
-  (interactive)
-  (let ( (inferior-lisp-program "/usr/bin/sbcl") )
-    (slime)))
-
-;; sbcl git dev version
-(defun sbcl-dev ()
-  "Inferior SBCL"
-  (interactive)
-  (let ( (inferior-lisp-program "sbcl") )
-    (slime)))
-
-(defun sbcl-ros ()
-  "Inferior SBCL, in ROS environment."
-  (interactive)
-  (let ( (inferior-lisp-program "/home/moesenle/work/ros/scripts/sbcl-ros.sh") )
-    (slime)))
-
-(global-set-key "\C-cl" 'sbcl-dev)
+(global-set-key "\C-cl" 'slime-ros)
 (global-set-key "\C-cf"
                 '(lambda ()
                   (interactive)
