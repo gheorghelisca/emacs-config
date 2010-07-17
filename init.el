@@ -89,7 +89,7 @@ mouse-3: Remove current window from display")))))
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-0]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
+ '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(py-imenu-show-method-args-p t)
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
@@ -134,7 +134,7 @@ mouse-3: Remove current window from display")))))
                 ("\\.vimpulse" . lisp-mode)
                 ("\\.cl$"      . lisp-mode)
                 ("\\.launch"   . xml-mode)
-                ) auto-mode-alist))
+                ("\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'" . post-mode)) auto-mode-alist))
 
 (setq default-tab-width 2)
 (setq initial-major-mode 'text-mode)
@@ -319,3 +319,5 @@ mouse-3: Remove current window from display")))))
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
+
+(put 'set-goal-column 'disabled nil)
