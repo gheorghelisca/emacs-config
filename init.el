@@ -190,7 +190,7 @@ mouse-3: Remove current window from display")))))
 (define-key slime-mode-map "\r" 'newline-and-indent)
 (define-key slime-mode-map [tab] (lambda ()
                                    (interactive)
-                                   (unless (yas/expand)
+                                   (unless (and (fboundp 'yas/expand) (yas/expand))
                                      (slime-fuzzy-indent-and-complete-symbol))))
 
 (define-key slime-mode-map (kbd "M-,")
