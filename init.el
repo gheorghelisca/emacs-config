@@ -4,7 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/site/org-mode")
 (add-to-list 'load-path "~/work/lisp/site/slime")
-(add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
+(add-to-list 'load-path "/opt/ros/cturtle/ros/tools/rosemacs")
 (add-to-list 'load-path "/usr/share/doc/git-core/contrib/emacs")
 
 ;; start emacs server for emacsclient
@@ -55,6 +55,7 @@
  '(ecb-tip-of-the-day nil)
  '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pyflakes-init))))
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
+ '(frame-background-mode (quote dark))
  '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
  '(gud-tooltip-mode t)
