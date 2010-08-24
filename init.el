@@ -160,6 +160,13 @@ mouse-3: Remove current window from display")))))
 (setq c-offsets-alist '((arglist-cont-nonempty . +)))
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
+(defun ros-c-mode-hook ()
+  (setq c-basic-offset 2)
+  (setq indent-tabs-mode nil)
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'innamespace 0))
+(add-hook 'c-mode-common-hook 'ros-c-mode-hook)
+
 ;; SHIFT-Arrow for moving through windows
 (require 'windmove)
 ;; (windmove-default-keybindings)
