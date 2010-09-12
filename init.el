@@ -121,7 +121,8 @@
                 ("\\.asd"      . lisp-mode)
                 ("\\.vimpulse" . lisp-mode)
                 ("\\.cl$"      . lisp-mode)
-                ("\\.launch"   . xml-mode)
+                ("\\.launch"   . nxml-mode)
+                ("manifest.xml" . nxml-mode)
                 ) auto-mode-alist))
 
 (setq default-tab-width 2)
@@ -283,6 +284,8 @@
 (require 'slime-ros)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
+(require 'rng-loc)
+(push (concat (ros-package-path "rosemacs") "/rng-schemas.xml") rng-schema-locating-files)
 
 ;; kill-ring <-> x11
 (setq x-select-enable-clipboard t)
