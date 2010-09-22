@@ -8,6 +8,8 @@
 ;; start emacs server for emacsclient
 (server-start)
 
+(setq frame-background-mode 'dark)
+
 ;; slime
 (require 'slime)
 
