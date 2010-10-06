@@ -5,7 +5,7 @@
   :license "$3"
   :description "$4"
 
-  :depends-on ()
+  :depends-on ($0)
   :components
   ((:module "src"
             :components
