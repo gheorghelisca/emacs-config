@@ -2,7 +2,6 @@
 
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
-(add-to-list 'load-path "~/.emacs.d/site/org-mode")
 (add-to-list 'load-path "~/work/lisp/site/slime")
 (add-to-list 'load-path "/opt/ros/cturtle/ros/tools/rosemacs")
 
@@ -12,9 +11,12 @@
 ;; slime
 (require 'slime)
 
+(require 'post)
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
-(require 'post)
+(add-hook 'post-mode-hook (lambda ()
+                            (interactive)
+			    (set-buffer-file-coding-system 'raw-text)))
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -155,26 +157,9 @@ mouse-3: Remove current window from display")))))
 ;; C/C++ indentation config
 (require 'cc-mode)
 (setq c-basic-offset 2)
-(setq c-default-style
-      '((java-mode . "java") (other . "ellemtel")))
-(setq c-offsets-alist '((arglist-cont-nonempty . +)))
+(c-set-offset 'substatement-open 0)
+(c-set-offset 'innamespace 0)
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
-
-(defun ros-c-mode-hook ()
-  (setq c-basic-offset 2)
-  (setq indent-tabs-mode nil)
-  (c-set-offset 'substatement-open 0)
-  (c-set-offset 'innamespace 0))
-(add-hook 'c-mode-common-hook 'ros-c-mode-hook)
-
-;; SHIFT-Arrow for moving through windows
-(require 'windmove)
-;; (windmove-default-keybindings)
-(setq windmove-wrap-around t)
-(global-set-key "\M-\S-n" 'windmove-down)
-(global-set-key "\M-\S-p" 'windmove-up)
-(global-set-key "\M-\S-f" 'windmove-right)
-(global-set-key "\M-\S-b" 'windmove-left)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
@@ -275,19 +260,6 @@ mouse-3: Remove current window from display")))))
 ;; numbered windows
 (require 'window-number)
 (window-number-mode)
-
-;; ;; delete trailing whitespaces in all lines before saving
-;; (add-hook 'write-file-hooks 'delete-trailing-whitespace)
-
-;; ;; delete whitespaces and lines > 1 at end of file before saving
-;; (add-hook 'write-file-hooks 'nuke-trailing-whitespace)
-
-;;(whitespace-global-mode)
-
-(defun mutt ()
-  (interactive)
-  (cd "~")
-  (ansi-term "/usr/bin/mutt" "mutt"))
 
 (put 'upcase-region 'disabled nil)
 
