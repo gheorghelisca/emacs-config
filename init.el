@@ -3,7 +3,7 @@
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/site/org-mode")
-(add-to-list 'load-path "~/work/lisp/sbcl/site/slime")
+(add-to-list 'load-path "~/work/lisp/site/slime")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -91,7 +91,9 @@
  '(view-diary-entries-initially t)
  '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
- '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
+ '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode)))
+ '(yas/fallback-behavior (quote return-nil))
+ '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) nil (yasnippet)))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -148,7 +150,10 @@
 (setq c-basic-offset 2)
 (setq c-default-style
       '((java-mode . "java") (other . "ellemtel")))
-(setq c-offsets-alist '((arglist-cont-nonempty . +)))
+(setq c-offsets-alist '((arglist-cont-nonempty . +)
+                        (substatement-open . 0)
+                        (innamespace . 0)))
+
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
 ;; SHIFT-Arrow for moving through windows
@@ -281,7 +286,7 @@
 (window-number-mode)
 
 ;; Load rosemacs
-(add-to-list 'load-path "~/work/ros/ros/tools/rosemacs")
+(add-to-list 'load-path "/opt/ros/cturtle/ros/tools/rosemacs")
 (require 'rosemacs)
 (require 'slime-ros)
 (invoke-rosemacs)
