@@ -286,7 +286,7 @@
 (window-number-mode)
 
 ;; Load rosemacs
-(add-to-list 'load-path "/opt/ros/cturtle/ros/tools/rosemacs")
+(add-to-list 'load-path "~/work/ros/unstable/sandbox/rosemacs")
 (require 'rosemacs)
 (require 'slime-ros)
 (invoke-rosemacs)
