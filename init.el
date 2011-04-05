@@ -14,6 +14,10 @@
 (require 'post)
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (require 'mail-addons)
+(add-hook 'post-mode-hook (lambda ()
+                            (interactive)
+                            (set-buffer-file-coding-system 'raw-text)))
+
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
