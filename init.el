@@ -74,6 +74,19 @@
  '(load-home-init-file t t)
  '(mark-diary-entries-in-calendar t)
  '(menu-bar-mode nil)
+ '(mode-line-format (quote ("%e" #("-" 0 1 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification #("   " 0 3 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-position (vc-mode vc-mode) #("  " 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) mode-line-modes (:eval (ros-current-pkg-modeline-entry)) (which-func-mode ("" which-func-format #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")))) (global-mode-string (#("--" 0 2 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")) global-mode-string)) #("-%-" 0 3 (help-echo "mouse-1: Select (drag to resize)
+mouse-2: Make current window occupy the whole frame
+mouse-3: Remove current window from display")))))
  '(next-line-add-newlines nil)
  '(paren-mode (quote paren) nil (paren))
  '(pc-select-meta-moves-sexps t)
