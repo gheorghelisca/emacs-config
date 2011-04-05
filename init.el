@@ -92,7 +92,7 @@
  '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode)))
- '(yas/fallback-behavior (quote return-nil))
+ '(yas/fallback-behavior (quote call-other-command))
  '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) nil (yasnippet)))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
@@ -180,8 +180,9 @@
 (define-key slime-mode-map "\r" 'newline-and-indent)
 (define-key slime-mode-map [tab] (lambda ()
                                    (interactive)
-                                   (unless (yas/expand)
-                                     (slime-fuzzy-indent-and-complete-symbol))))
+                                   (let ((yas/fallback-behavior nil))
+                                     (unless (yas/expand)
+                                       (slime-fuzzy-indent-and-complete-symbol)))))
 
 (define-key slime-mode-map (kbd "M-,")
   (lambda ()
