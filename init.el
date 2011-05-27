@@ -8,6 +8,8 @@
 ;; start emacs server for emacsclient
 (server-start)
 
+(setq frame-background-mode 'dark)
+
 ;; slime
 (require 'slime)
 
@@ -16,7 +18,7 @@
 (require 'mail-addons)
 (add-hook 'post-mode-hook (lambda ()
                             (interactive)
-			    (set-buffer-file-coding-system 'raw-text)))
+                            (set-buffer-file-coding-system 'raw-text)))
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -92,6 +94,7 @@ mouse-3: Remove current window from display")))))
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
  '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
+ '(post-email-address "moesenle@in.tum.de")
  '(py-imenu-show-method-args-p t)
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
@@ -103,7 +106,9 @@ mouse-3: Remove current window from display")))))
  '(view-diary-entries-initially t)
  '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
- '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
+ '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode)))
+ '(yas/fallback-behavior (quote call-other-command))
+ '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) nil (yasnippet)))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -136,7 +141,10 @@ mouse-3: Remove current window from display")))))
                 ("\\.vimpulse" . lisp-mode)
                 ("\\.cl$"      . lisp-mode)
                 ("\\.launch"   . xml-mode)
-                ("\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'" . post-mode)) auto-mode-alist))
+                ("\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'" . post-mode)
+                ("\\.launch"   . nxml-mode)
+                ("manifest.xml" . nxml-mode)
+                ) auto-mode-alist))
 
 (setq default-tab-width 2)
 (setq initial-major-mode 'text-mode)
@@ -157,8 +165,11 @@ mouse-3: Remove current window from display")))))
 ;; C/C++ indentation config
 (require 'cc-mode)
 (setq c-basic-offset 2)
-(c-set-offset 'substatement-open 0)
-(c-set-offset 'innamespace 0)
+(setq c-default-style
+      '((java-mode . "java") (other . "ellemtel")))
+(setq c-offsets-alist '((arglist-cont-nonempty . +)
+                        (substatement-open . 0)
+                        (innamespace . 0)))
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
@@ -176,8 +187,9 @@ mouse-3: Remove current window from display")))))
 (define-key slime-mode-map "\r" 'newline-and-indent)
 (define-key slime-mode-map [tab] (lambda ()
                                    (interactive)
-                                   (unless (yas/expand)
-                                     (slime-fuzzy-indent-and-complete-symbol))))
+                                   (let ((yas/fallback-behavior nil))
+                                     (unless (yas/expand)
+                                       (slime-fuzzy-indent-and-complete-symbol)))))
 
 (define-key slime-mode-map (kbd "M-,")
   (lambda ()
@@ -240,15 +252,15 @@ mouse-3: Remove current window from display")))))
 ;; Load auctex
 (load "auctex")
 
+;; M-u and M-l
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 ;; Flyspell mode
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
-
-;;(setq flyspell-default-dictionary "american")
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
@@ -261,11 +273,13 @@ mouse-3: Remove current window from display")))))
 (require 'window-number)
 (window-number-mode)
 
-(put 'upcase-region 'disabled nil)
-
+;; Load rosemacs
 (require 'rosemacs)
+(require 'slime-ros)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
+(require 'rng-loc)
+(push (concat (ros-package-path "rosemacs") "/rng-schemas.xml") rng-schema-locating-files)
 
 ;; kill-ring <-> x11
 (setq x-select-enable-clipboard t)
