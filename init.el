@@ -2,8 +2,8 @@
 
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
-(add-to-list 'load-path "~/work/lisp/site/slime")
-(add-to-list 'load-path "~/work/ros/unstable/sandbox/rosemacs")
+;; (add-to-list 'load-path "~/work/lisp/site/slime")
+(add-to-list 'load-path "/opt/ros/electric/ros/tools/rosemacs")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -11,7 +11,7 @@
 (setq frame-background-mode 'dark)
 
 ;; slime
-(require 'slime)
+;; (require 'slime)
 
 (require 'post)
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
@@ -93,12 +93,14 @@ mouse-3: Remove current window from display")))))
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(post-email-address "moesenle@in.tum.de")
+ '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(py-imenu-show-method-args-p t)
+ '(python-indent 2)
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(slime-ros-completion-function (quote ido-completing-read))
+ '(split-width-threshold 185)
  '(standard-indent 2)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
@@ -107,8 +109,8 @@ mouse-3: Remove current window from display")))))
  '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode)))
- '(yas/fallback-behavior (quote call-other-command))
- '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) nil (yasnippet)))
+ '(yas/fallback-behavior (quote call-other-command) t)
+ '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) t (yasnippet)))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -176,63 +178,63 @@ mouse-3: Remove current window from display")))))
 (modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
 (modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
-(slime-setup '(slime-fancy slime-asdf slime-indentation slime-ros))
-(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+;; (slime-setup '(slime-fancy slime-asdf slime-indentation slime-ros))
+;; (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
-(setq slime-multiprocessing t)
+;; (setq slime-multiprocessing t)
 
-;;; adjust lisp indentation
-(put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
+;; ;;; adjust lisp indentation
+;; (put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
 
-(define-key slime-mode-map "\r" 'newline-and-indent)
-(define-key slime-mode-map [tab] (lambda ()
-                                   (interactive)
-                                   (let ((yas/fallback-behavior nil))
-                                     (unless (yas/expand)
-                                       (slime-fuzzy-indent-and-complete-symbol)))))
+;; (define-key slime-mode-map "\r" 'newline-and-indent)
+;; (define-key slime-mode-map [tab] (lambda ()
+;;                                    (interactive)
+;;                                    (let ((yas/fallback-behavior nil))
+;;                                      (unless (yas/expand)
+;;                                        (slime-fuzzy-indent-and-complete-symbol)))))
 
-(define-key slime-mode-map (kbd "M-,")
-  (lambda ()
-    (interactive)
-    (condition-case nil
-        (slime-pop-find-definition-stack)
-      (error (tags-loop-continue)))))
+;; (define-key slime-mode-map (kbd "M-,")
+;;   (lambda ()
+;;     (interactive)
+;;     (condition-case nil
+;;         (slime-pop-find-definition-stack)
+;;       (error (tags-loop-continue)))))
 
-(define-key lisp-mode-map (kbd "M-a") 
-  (lambda ()
-    (interactive)
-    (let ((ppss (syntax-ppss)))
-      (if (nth 3 ppss)
-          (goto-char (1+ (nth 8 ppss)))
-        (progn
-          (backward-up-list 1)
-          (down-list 1))))))
+;; (define-key lisp-mode-map (kbd "M-a") 
+;;   (lambda ()
+;;     (interactive)
+;;     (let ((ppss (syntax-ppss)))
+;;       (if (nth 3 ppss)
+;;           (goto-char (1+ (nth 8 ppss)))
+;;         (progn
+;;           (backward-up-list 1)
+;;           (down-list 1))))))
 
-(define-key lisp-mode-map (kbd "M-e") 
-  (lambda ()
-    (interactive)
-    (let ((ppss (syntax-ppss)))
-      (if (nth 3 ppss)
-          (progn
-            (goto-char (nth 8 ppss))
-            (forward-sexp 1)
-            (backward-char 1))
-        (progn
-          (up-list 1)
-          (backward-down-list 1))))))
+;; (define-key lisp-mode-map (kbd "M-e") 
+;;   (lambda ()
+;;     (interactive)
+;;     (let ((ppss (syntax-ppss)))
+;;       (if (nth 3 ppss)
+;;           (progn
+;;             (goto-char (nth 8 ppss))
+;;             (forward-sexp 1)
+;;             (backward-char 1))
+;;         (progn
+;;           (up-list 1)
+;;           (backward-down-list 1))))))
 
-;; use internal w3m browser (used in particular for clhs lookup)
-(setq browse-url-browser-function (lambda (url &optional new-window)
-                                    (when (one-window-p)
-                                      (split-window))
-                                    (other-window 1)
-                                    (w3m url new-window nil)))
+;; ;; use internal w3m browser (used in particular for clhs lookup)
+;; (setq browse-url-browser-function (lambda (url &optional new-window)
+;;                                     (when (one-window-p)
+;;                                       (split-window))
+;;                                     (other-window 1)
+;;                                     (w3m url new-window nil)))
 
-(global-set-key "\C-cl" 'slime-ros)
-(global-set-key "\C-cf"
-                '(lambda ()
-                  (interactive)
-                  (slime-quit-lisp)))
+;; (global-set-key "\C-cl" 'slime-ros)
+;; (global-set-key "\C-cf"
+;;                 '(lambda ()
+;;                   (interactive)
+;;                   (slime-quit-lisp)))
 
 ;; paredit mode
 (require 'paredit)
@@ -275,7 +277,7 @@ mouse-3: Remove current window from display")))))
 
 ;; Load rosemacs
 (require 'rosemacs)
-(require 'slime-ros)
+;; (require 'slime-ros)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
 (require 'rng-loc)
@@ -289,22 +291,34 @@ mouse-3: Remove current window from display")))))
 (setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
 
 ;; Python stuff
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
 
-(defun flymake-pyflakes-init ()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
+;; (defun flymake-pyflakes-init ()
+;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                      'flymake-create-temp-inplace))
+;;          (local-file (file-relative-name
+;;                       temp-file
+;;                       (file-name-directory buffer-file-name))))
+;;     (list "pyflakes" (list local-file))))
 
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
 
 (require 'inf-haskell)
+
+
+;; Configure EMMS                                                                                                                                                                                                                                                                                                              
+(require 'emms-setup)
+(emms-standard)
+(emms-default-players)
+(emms-mode-line-disable)
+
+(global-set-key (kbd "C-c e s") 'emms-start)
+(global-set-key (kbd "C-c e P") 'emms-pause)
+(global-set-key (kbd "C-c e n") 'emms-next)
+(global-set-key (kbd "C-c e p") 'emms-previous)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
