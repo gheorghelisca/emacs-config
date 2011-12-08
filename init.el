@@ -49,7 +49,7 @@
  '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
- '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pyflakes-init))))
+ '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pychecker-init))))
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
  '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
@@ -97,6 +97,7 @@ mouse-3: Remove current window from display")))))
  '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(py-imenu-show-method-args-p t)
  '(python-indent 2)
+ '(python-mode-hook (quote (flymake-mode)))
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(slime-ros-completion-function (quote ido-completing-read))
@@ -109,8 +110,8 @@ mouse-3: Remove current window from display")))))
  '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
  '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode)))
- '(yas/fallback-behavior (quote call-other-command) t)
- '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) t (yasnippet)))
+ '(yas/fallback-behavior (quote call-other-command))
+ '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) nil (yasnippet)))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -166,12 +167,8 @@ mouse-3: Remove current window from display")))))
 
 ;; C/C++ indentation config
 (require 'cc-mode)
-(setq c-basic-offset 2)
-(setq c-default-style
-      '((java-mode . "java") (other . "ellemtel")))
-(setq c-offsets-alist '((arglist-cont-nonempty . +)
-                        (substatement-open . 0)
-                        (innamespace . 0)))
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook 'google-set-c-style)
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
@@ -301,6 +298,16 @@ mouse-3: Remove current window from display")))))
 ;;                       temp-file
 ;;                       (file-name-directory buffer-file-name))))
 ;;     (list "pyflakes" (list local-file))))
+
+(defun flymake-pychecker-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "flymake-pychecker.sh" (list local-file))))
+
+(require 'flymake-cursor)
 
 (require 'yasnippet)
 (yas/initialize)
