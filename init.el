@@ -49,7 +49,7 @@
  '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
- '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pyflakes-init))))
+ '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pychecker-init))))
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
  '(gdb-many-windows t)
  '(gnuserv-program (concat exec-directory "/gnuserv") t)
@@ -165,12 +165,8 @@ mouse-3: Remove current window from display")))))
 
 ;; C/C++ indentation config
 (require 'cc-mode)
-(setq c-basic-offset 2)
-(setq c-default-style
-      '((java-mode . "java") (other . "ellemtel")))
-(setq c-offsets-alist '((arglist-cont-nonempty . +)
-                        (substatement-open . 0)
-                        (innamespace . 0)))
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook 'google-set-c-style)
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
 ;; [ and ] should be handled paranthesis-like in lisp files.
@@ -290,16 +286,26 @@ mouse-3: Remove current window from display")))))
 (setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
 
 ;; Python stuff
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
 
-(defun flymake-pyflakes-init ()
+;; (defun flymake-pyflakes-init ()
+;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                      'flymake-create-temp-inplace))
+;;          (local-file (file-relative-name
+;;                       temp-file
+;;                       (file-name-directory buffer-file-name))))
+;;     (list "pyflakes" (list local-file))))
+
+(defun flymake-pychecker-init ()
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
                      'flymake-create-temp-inplace))
          (local-file (file-relative-name
                       temp-file
                       (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
+    (list "flymake-pychecker.sh" (list local-file))))
+
+(require 'flymake-cursor)
 
 (require 'yasnippet)
 (yas/initialize)
