@@ -3,7 +3,7 @@
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/work/lisp/site/slime")
-(add-to-list 'load-path "~/work/ros/unstable/sandbox/rosemacs")
+(add-to-list 'load-path "/opt/ros/electric/ros/tools/rosemacs")
 
 ;; start emacs server for emacsclient
 (server-start)
@@ -93,8 +93,8 @@ mouse-3: Remove current window from display")))))
  '(pc-select-meta-moves-sexps t)
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
- '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(post-email-address "moesenle@in.tum.de")
+ '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(py-imenu-show-method-args-p t)
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
