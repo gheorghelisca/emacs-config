@@ -307,6 +307,17 @@ mouse-3: Remove current window from display")))))
 
 (require 'inf-haskell)
 
+;; Configure EMMS
+(require 'emms-setup)
+(emms-standard)
+(emms-default-players)
+(emms-mode-line-disable)
+
+(global-set-key (kbd "C-c e s") 'emms-start)
+(global-set-key (kbd "C-c e P") 'emms-pause)
+(global-set-key (kbd "C-c e n") 'emms-next)
+(global-set-key (kbd "C-c e p") 'emms-previous)
+
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
