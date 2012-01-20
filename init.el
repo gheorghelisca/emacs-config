@@ -2,23 +2,12 @@
 
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
-(add-to-list 'load-path "~/work/lisp/site/slime")
 (add-to-list 'load-path "/opt/ros/electric/ros/tools/rosemacs")
 
 ;; start emacs server for emacsclient
 (server-start)
 
 (setq frame-background-mode 'dark)
-
-;; slime
-(require 'slime)
-
-(require 'post)
-;; use cool ldap-search and mutt aliases and addressbook for composing mails
-(require 'mail-addons)
-(add-hook 'post-mode-hook (lambda ()
-                            (interactive)
-                            (set-buffer-file-coding-system 'raw-text)))
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -169,68 +158,6 @@ mouse-3: Remove current window from display")))))
 (add-hook 'c-mode-common-hook 'google-set-c-style)
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
-;; [ and ] should be handled paranthesis-like in lisp files.
-(modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
-(modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
-
-(slime-setup '(slime-fancy slime-asdf slime-indentation slime-ros))
-(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-
-(setq slime-multiprocessing t)
-
-;;; adjust lisp indentation
-(put 'make-instance 'common-lisp-indent-function '(4 &rest 2))
-
-(define-key slime-mode-map "\r" 'newline-and-indent)
-(define-key slime-mode-map [tab] (lambda ()
-                                   (interactive)
-                                   (let ((yas/fallback-behavior nil))
-                                     (unless (yas/expand)
-                                       (slime-fuzzy-indent-and-complete-symbol)))))
-
-(define-key slime-mode-map (kbd "M-,")
-  (lambda ()
-    (interactive)
-    (condition-case nil
-        (slime-pop-find-definition-stack)
-      (error (tags-loop-continue)))))
-
-(define-key lisp-mode-map (kbd "M-a") 
-  (lambda ()
-    (interactive)
-    (let ((ppss (syntax-ppss)))
-      (if (nth 3 ppss)
-          (goto-char (1+ (nth 8 ppss)))
-        (progn
-          (backward-up-list 1)
-          (down-list 1))))))
-
-(define-key lisp-mode-map (kbd "M-e") 
-  (lambda ()
-    (interactive)
-    (let ((ppss (syntax-ppss)))
-      (if (nth 3 ppss)
-          (progn
-            (goto-char (nth 8 ppss))
-            (forward-sexp 1)
-            (backward-char 1))
-        (progn
-          (up-list 1)
-          (backward-down-list 1))))))
-
-;; use internal w3m browser (used in particular for clhs lookup)
-(setq browse-url-browser-function (lambda (url &optional new-window)
-                                    (when (one-window-p)
-                                      (split-window))
-                                    (other-window 1)
-                                    (w3m url new-window nil)))
-
-(global-set-key "\C-cl" 'slime-ros)
-(global-set-key "\C-cf"
-                '(lambda ()
-                  (interactive)
-                  (slime-quit-lisp)))
-
 ;; paredit mode
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook (lambda ()
@@ -245,9 +172,6 @@ mouse-3: Remove current window from display")))))
 
 ;; Ignore .svn stuff in grep-find
 (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -and -not -name \"*.tmp\" -print0 | xargs -0 -e grep -i -n -s -F ")
-
-;; Load auctex
-(load "auctex")
 
 ;; M-u and M-l
 (put 'downcase-region 'disabled nil)
@@ -272,7 +196,6 @@ mouse-3: Remove current window from display")))))
 
 ;; Load rosemacs
 (require 'rosemacs)
-(require 'slime-ros)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
 (require 'rng-loc)
@@ -310,25 +233,5 @@ mouse-3: Remove current window from display")))))
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
-
-(require 'inf-haskell)
-
-;; Configure EMMS
-(require 'emms-setup)
-(emms-standard)
-(emms-default-players)
-(emms-mode-line-disable)
-
-(global-set-key (kbd "C-c e s") 'emms-start)
-(global-set-key (kbd "C-c e P") 'emms-pause)
-(global-set-key (kbd "C-c e n") 'emms-next)
-(global-set-key (kbd "C-c e p") 'emms-previous)
-
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
 
 (put 'set-goal-column 'disabled nil)
