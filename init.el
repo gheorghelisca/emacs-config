@@ -259,6 +259,8 @@ mouse-3: Remove current window from display")))))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
+(dolist (hook '(lisp-mode-hook c++-mode-hook python-mode-hook))
+  (add-hook hook (lambda () (flyspell-prog-mode))))
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
