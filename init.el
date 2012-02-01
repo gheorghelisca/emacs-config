@@ -2,21 +2,18 @@
 
 ;; Public emacs site
 (add-to-list 'load-path "~/.emacs.d/site")
-(add-to-list 'load-path "~/.emacs.d/site/org-mode")
 (add-to-list 'load-path "~/work/lisp/site/slime")
-(add-to-list 'load-path "/opt/ros/cturtle/ros/tools/rosemacs")
-(add-to-list 'load-path "/usr/share/doc/git-core/contrib/emacs")
+(add-to-list 'load-path "/opt/ros/electric/ros/tools/rosemacs")
 
 ;; start emacs server for emacsclient
 (server-start)
 
-(require 'git)
-
-(require 'cl)
+(setq frame-background-mode 'dark)
 
 ;; slime
 (ignore-errors (require 'slime))
 
+(require 'post)
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
 (ignore-errors
   (require 'mail-addons)
@@ -53,7 +50,7 @@
  '(desktop-save-mode nil)
  '(diary-file "~/.emacs.d/diary")
  '(ecb-tip-of-the-day nil)
- '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pyflakes-init))))
+ '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.p[ml]\\'" flymake-perl-init) ("\\.php[345]?\\'" flymake-php-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.idl\\'" flymake-simple-make-init) ("\\.py\\'" flymake-pychecker-init))))
  '(flymake-master-file-dirs (quote ("." "./src" "./UnitTest" "./source")))
  '(frame-background-mode (quote dark))
  '(gdb-many-windows t)
@@ -99,7 +96,9 @@ mouse-3: Remove current window from display")))))
  '(pc-select-selection-keys-only t)
  '(pc-selection-mode t nil (pc-select))
  '(post-email-address "moesenle@in.tum.de")
+ '(post-mail-message "\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'")
  '(py-imenu-show-method-args-p t)
+ '(python-indent 2)
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
  '(slime-ros-completion-function (quote ido-completing-read))
@@ -110,7 +109,9 @@ mouse-3: Remove current window from display")))))
  '(view-diary-entries-initially t)
  '(w3m-session-crash-recovery nil)
  '(whitespace-check-leading-whitespace nil)
- '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode))))
+ '(whitespace-modes (quote (ada-mode asm-mode autoconf-mode awk-mode c-mode c++-mode cc-mode change-log-mode cperl-mode electric-nroff-mode emacs-lisp-mode f90-mode fortran-mode html-mode html3-mode java-mode jde-mode ksh-mode nil LaTeX-mode lisp-mode m4-mode makefile-mode modula-2-mode nroff-mode objc-mode pascal-mode perl-mode prolog-mode python-mode scheme-mode sgml-mode sh-mode shell-script-mode simula-mode tcl-mode tex-mode texinfo-mode vrml-mode xml-mode)))
+ '(yas/fallback-behavior (quote call-other-command))
+ '(yas/root-directory (quote ("~/.emacs.d/snippets" "/usr/share/emacs/site-lisp/yasnippet/snippets")) nil (yasnippet)))
 
 (autoload 'c++-mode  "cc-mode" "C++ Editing Mode" t)
 (autoload 'c-mode    "cc-mode" "C Editing Mode"   t)
@@ -142,7 +143,11 @@ mouse-3: Remove current window from display")))))
                 ("\\.asd"      . lisp-mode)
                 ("\\.vimpulse" . lisp-mode)
                 ("\\.cl$"      . lisp-mode)
+                (".sbclrc" . lisp-mode)
                 ("\\.launch"   . xml-mode)
+                ("\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'" . post-mode)
+                ("\\.launch"   . nxml-mode)
+                ("manifest.xml" . nxml-mode)
                 ) auto-mode-alist))
 
 (setq default-tab-width 2)
@@ -163,22 +168,13 @@ mouse-3: Remove current window from display")))))
 
 ;; C/C++ indentation config
 (require 'cc-mode)
-(setq c-basic-offset 2)
-(setq c-default-style
-      '((java-mode . "java") (other . "ellemtel")))
-(setq c-offsets-alist '((arglist-cont-nonempty . +)
-                        (substatement-open . 0)
-                        (innamespace . 0)))
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook 'google-set-c-style)
 (define-key c-mode-base-map "\C-c\C-c" 'recompile)
 
-;; SHIFT-Arrow for moving through windows
-(require 'windmove)
-;; (windmove-default-keybindings)
-(setq windmove-wrap-around t)
-(global-set-key "\M-\S-n" 'windmove-down)
-(global-set-key "\M-\S-p" 'windmove-up)
-(global-set-key "\M-\S-f" 'windmove-right)
-(global-set-key "\M-\S-b" 'windmove-left)
+;; [ and ] should be handled paranthesis-like in lisp files.
+(modify-syntax-entry ?\[ "(]  " lisp-mode-syntax-table)
+(modify-syntax-entry ?\] ")[  " lisp-mode-syntax-table)
 
 (slime-setup '(slime-fancy slime-asdf slime-indentation slime-ros))
 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
@@ -191,8 +187,9 @@ mouse-3: Remove current window from display")))))
 (define-key slime-mode-map "\r" 'newline-and-indent)
 (define-key slime-mode-map [tab] (lambda ()
                                    (interactive)
-                                   (unless (and (fboundp 'yas/expand) (yas/expand))
-                                     (slime-fuzzy-indent-and-complete-symbol))))
+                                   (let ((yas/fallback-behavior nil))
+                                     (unless (yas/expand)
+                                       (slime-fuzzy-indent-and-complete-symbol)))))
 
 (define-key slime-mode-map (kbd "M-,")
   (lambda ()
@@ -231,27 +228,7 @@ mouse-3: Remove current window from display")))))
                                     (other-window 1)
                                     (w3m url new-window nil)))
 
-;; sbcl
-(defun sbcl ()
-  "Inferior SBCL"
-  (interactive)
-  (let ((inferior-lisp-program "/usr/bin/sbcl"))
-    (slime)))
-
-;; sbcl git dev version
-(defun sbcl-dev ()
-  "Inferior SBCL"
-  (interactive)
-  (let ((inferior-lisp-program "sbcl"))
-    (slime)))
-
-(defun sbcl-ros ()
-  "Inferior SBCL, in ROS environment."
-  (interactive)
-  (let ((inferior-lisp-program "/u/lorenz/work/ros/scripts/sbcl-ros.sh"))
-    (slime)))
-
-(global-set-key "\C-cl" 'sbcl-dev)
+(global-set-key "\C-cl" 'slime-ros)
 (global-set-key "\C-cf"
                 '(lambda ()
                    (interactive)
@@ -276,15 +253,17 @@ mouse-3: Remove current window from display")))))
 (ignore-errors
   (load "auctex"))
 
+;; M-u and M-l
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 ;; Flyspell mode
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
-
-;;(setq flyspell-default-dictionary "american")
+(dolist (hook '(lisp-mode-hook c++-mode-hook python-mode-hook))
+  (add-hook hook (lambda () (flyspell-prog-mode))))
 
 ;; Set ispell default dictionary
 (ispell-change-dictionary "american")
@@ -297,11 +276,13 @@ mouse-3: Remove current window from display")))))
 (require 'window-number)
 (window-number-mode)
 
-(put 'upcase-region 'disabled nil)
-
+;; Load rosemacs
 (require 'rosemacs)
+(require 'slime-ros)
 (invoke-rosemacs)
 (global-set-key "\C-x\C-r" ros-keymap)
+(require 'rng-loc)
+(push (concat (ros-package-path "rosemacs") "/rng-schemas.xml") rng-schema-locating-files)
 
 ;; kill-ring <-> x11
 (setq x-select-enable-clipboard t)
@@ -311,30 +292,22 @@ mouse-3: Remove current window from display")))))
 (setq org-ditaa-jar-path "~/.emacs.d/bin/ditaa.jar")
 
 ;; Python stuff
-(ignore-errors
-  (require 'pymacs)
-  (pymacs-load "ropemacs" "rope-")
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
 
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "pyflakes" (list local-file))))
+(defun flymake-pychecker-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "~/.emacs.d/bin/flymake-pychecker" (list local-file))))
 
-  (require 'yasnippet)
-  (yas/initialize)
-  (yas/load-directory "~/.emacs.d/snippets"))
+(require 'flymake-cursor)
 
-
-;; Enable ansi colors for shell
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-;; Toggle sticky setting for current window.
-(defun sticky-window ()
-  (interactive)
-  (set-window-dedicated-p (selected-window) (not  (window-dedicated-p (selected-window)))))
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets")
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
@@ -342,3 +315,5 @@ mouse-3: Remove current window from display")))))
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
+
+(put 'set-goal-column 'disabled nil)
