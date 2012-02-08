@@ -1,3 +1,6 @@
 [submodule "emms"]
 	path = emms
 	url = git://git.sv.gnu.org/emms.git
+[submodule "rosemacs"]
+	path = rosemacs
+	url = https://kforge.ros.org/rosemacs/git
