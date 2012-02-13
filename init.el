@@ -4,7 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/site")
 (add-to-list 'load-path "~/.emacs.d/emms/lisp")
 (add-to-list 'load-path "~/.emacs.d/rosemacs")
-(add-to-list 'load-path "~/work/lisp/site/slime")
+(add-to-list 'load-path "~/.emacs.d/slime")
 
 ;; start emacs server for emacsclient
 (server-start)

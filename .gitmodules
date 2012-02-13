@@ -4,3 +4,6 @@
 [submodule "rosemacs"]
 	path = rosemacs
 	url = https://kforge.ros.org/rosemacs/git
+[submodule "slime"]
+	path = slime
+	url = git://sbcl.boinkor.net/slime.git
