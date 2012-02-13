@@ -9,17 +9,17 @@
 ;; start emacs server for emacsclient
 (server-start)
 
-(setq frame-background-mode 'dark)
+;;(setq frame-background-mode 'dark)
 
 ;; slime
 (require 'slime)
 
-(require 'post)
+;;(require 'post)
 ;; use cool ldap-search and mutt aliases and addressbook for composing mails
-(require 'mail-addons)
-(add-hook 'post-mode-hook (lambda ()
-                            (interactive)
-                            (set-buffer-file-coding-system 'raw-text)))
+;;(require 'mail-addons)
+;;(add-hook 'post-mode-hook (lambda ()
+;;                            (interactive)
+;;                            (set-buffer-file-coding-system 'raw-text)))
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -309,18 +309,18 @@ mouse-3: Remove current window from display")))))
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
 
-(require 'inf-haskell)
+;;(require 'inf-haskell)
 
 ;; Configure EMMS
-(require 'emms-setup)
-(emms-standard)
-(emms-default-players)
-(emms-mode-line-disable)
+;;(require 'emms-setup)
+;;(emms-standard)
+;;(emms-default-players)
+;;(emms-mode-line-disable)
 
-(global-set-key (kbd "C-c e s") 'emms-start)
-(global-set-key (kbd "C-c e P") 'emms-pause)
-(global-set-key (kbd "C-c e n") 'emms-next)
-(global-set-key (kbd "C-c e p") 'emms-previous)
+;;(global-set-key (kbd "C-c e s") 'emms-start)
+;;(global-set-key (kbd "C-c e P") 'emms-pause)
+;;(global-set-key (kbd "C-c e n") 'emms-next)
+;;(global-set-key (kbd "C-c e p") 'emms-previous)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
