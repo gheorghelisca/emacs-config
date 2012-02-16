@@ -313,9 +313,9 @@ mouse-3: Remove current window from display")))))
 
 ;; Configure EMMS
 (require 'emms-setup)
+(require 'emms-streams)
 (emms-standard)
 (emms-default-players)
-(emms-mode-line-disable)
 
 (global-set-key (kbd "C-c e s") 'emms-start)
 (global-set-key (kbd "C-c e P") 'emms-pause)
