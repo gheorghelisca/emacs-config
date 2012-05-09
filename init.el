@@ -151,6 +151,7 @@ mouse-3: Remove current window from display")))))
                 ("\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'" . post-mode)
                 ("\\.launch"   . nxml-mode)
                 ("manifest.xml" . nxml-mode)
+                ("PKGBUILD" . sh-mode)
                 ) auto-mode-alist))
 
 (setq default-tab-width 2)
