@@ -11,8 +11,8 @@
 
 (setq frame-background-mode 'dark)
 
-;; slime
 (require 'slime)
+(require 'cmake-mode)
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -152,6 +152,8 @@ mouse-3: Remove current window from display")))))
                 ("\\.launch"   . nxml-mode)
                 ("manifest.xml" . nxml-mode)
                 ("PKGBUILD" . sh-mode)
+                ("CMakeLists\\.txt\\'" . cmake-mode)
+                ("\\.cmake\\'" . cmake-mode)
                 ) auto-mode-alist))
 
 (setq default-tab-width 2)
