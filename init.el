@@ -248,6 +248,8 @@ mouse-3: Remove current window from display")))))
                             (paredit-mode +1)))
 (add-hook 'inferior-lisp-mode-hook (lambda ()
                                      (paredit-mode +1)))
+(define-key paredit-mode-map (kbd ")") 'paredit-close-round-and-newline)
+(define-key paredit-mode-map (kbd "M-)") 'paredit-close-round)
 
 ;; Mouse wheel
 (autoload 'mwheel-install "mwheel" "Enable mouse wheel support.") (mwheel-install)
