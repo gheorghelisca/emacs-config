@@ -42,9 +42,12 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(LaTeX-verbatim-regexp "\\(verbatim\\|lstlisting\\)\\*?")
  '(TeX-PDF-mode t)
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
+ '(calendar-mark-diary-entries-flag t)
+ '(calendar-view-diary-initially-flag t)
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
