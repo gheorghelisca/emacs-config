@@ -44,6 +44,7 @@
   ;; If there is more than one, they won't work right.
  '(LaTeX-verbatim-regexp "\\(verbatim\\|lstlisting\\)\\*?")
  '(TeX-PDF-mode t)
+ '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "dvips and gv") (output-dvi "xdvi") (output-pdf "Evince") (output-html "xdg-open"))))
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
  '(calendar-mark-diary-entries-flag t)
