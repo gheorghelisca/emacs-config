@@ -3,3 +3,5 @@ site.unused/*
 *.elc
 *~
 diary
+tramp
+emms-cache

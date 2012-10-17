@@ -20,6 +20,8 @@
 ;;(add-hook 'post-mode-hook (lambda ()
 ;;                            (interactive)
 ;;                            (set-buffer-file-coding-system 'raw-text)))
+(require 'cmake-mode)
+
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -28,6 +30,15 @@
 (require 'paren)
 (show-paren-mode 1)
 (global-set-key '[delete] 'delete-char)
+
+;; Use regexp search per default. Swap regexp and normal search key
+;; bindings.
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key (kbd "M-%") 'query-replace-regexp)
+(global-set-key (kbd "C-M-%") 'query-replace)
 
 ;; disable iconification bindings
 (global-unset-key "\C-z")
@@ -40,9 +51,13 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(LaTeX-verbatim-regexp "\\(verbatim\\|lstlisting\\)\\*?")
  '(TeX-PDF-mode t)
+ '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "dvips and gv") (output-dvi "xdvi") (output-pdf "Evince") (output-html "xdg-open"))))
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
+ '(calendar-mark-diary-entries-flag t)
+ '(calendar-view-diary-initially-flag t)
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
@@ -149,6 +164,9 @@ mouse-3: Remove current window from display")))))
                 ("\\(mutt-[a-zA-Z0-9-.]+-[0-9]+-[0-9]+-[a-z0-9]+\\|mutt[a-zA-Z0-9._-]\\{6\\}\\)\\'" . post-mode)
                 ("\\.launch"   . nxml-mode)
                 ("manifest.xml" . nxml-mode)
+                ("PKGBUILD" . sh-mode)
+                ("CMakeLists\\.txt\\'" . cmake-mode)
+                ("\\.cmake\\'" . cmake-mode)
                 ) auto-mode-alist))
 
 (setq default-tab-width 2)
@@ -243,6 +261,8 @@ mouse-3: Remove current window from display")))))
                             (paredit-mode +1)))
 (add-hook 'inferior-lisp-mode-hook (lambda ()
                                      (paredit-mode +1)))
+(define-key paredit-mode-map (kbd ")") 'paredit-close-round-and-newline)
+(define-key paredit-mode-map (kbd "M-)") 'paredit-close-round)
 
 ;; Mouse wheel
 (autoload 'mwheel-install "mwheel" "Enable mouse wheel support.") (mwheel-install)
