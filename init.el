@@ -104,6 +104,7 @@ mouse-3: Remove current window from display")))))
  '(python-indent 2)
  '(ros-completion-function (quote ido-completing-read))
  '(safe-local-variable-values (quote ((TeX-PDF . t) (readtable . nisp) (readtable . :nisp) (Package . NISP) (Syntax . Common-Lisp) (Package . SAX) (Encoding . utf-8) (Syntax . COMMON-LISP) (Package . CL-PPCRE) (package . rune-dom) (readtable . runes) (Syntax . ANSI-Common-Lisp) (Base . 10))))
+ '(slime-backend "swank-loader.lisp")
  '(slime-ros-completion-function (quote ido-completing-read))
  '(standard-indent 2)
  '(tool-bar-mode nil)
@@ -337,3 +338,5 @@ mouse-3: Remove current window from display")))))
  )
 
 (put 'set-goal-column 'disabled nil)
+(set-face-attribute 'default nil :height 100)
+
