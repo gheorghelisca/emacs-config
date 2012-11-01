@@ -9,10 +9,19 @@
 ;; start emacs server for emacsclient
 (server-start)
 
-(setq frame-background-mode 'dark)
+;;(setq frame-background-mode 'dark)
 
+;; slime
 (require 'slime)
+
+;;(require 'post)
+;; use cool ldap-search and mutt aliases and addressbook for composing mails
+;;(require 'mail-addons)
+;;(add-hook 'post-mode-hook (lambda ()
+;;                            (interactive)
+;;                            (set-buffer-file-coding-system 'raw-text)))
 (require 'cmake-mode)
+
 
 ;; Emacs should always ask for confirmation on exit
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -42,9 +51,13 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(LaTeX-verbatim-regexp "\\(verbatim\\|lstlisting\\)\\*?")
  '(TeX-PDF-mode t)
+ '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "dvips and gv") (output-dvi "xdvi") (output-pdf "Evince") (output-html "xdg-open"))))
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/emacs-file-backups"))))
  '(c-basic-offset (quote set-from-style))
+ '(calendar-mark-diary-entries-flag t)
+ '(calendar-view-diary-initially-flag t)
  '(column-number-mode t)
  '(compilation-scroll-output t)
  '(compile-command "make ")
@@ -317,18 +330,18 @@ mouse-3: Remove current window from display")))))
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
 
-(require 'inf-haskell)
+;;(require 'inf-haskell)
 
 ;; Configure EMMS
-(require 'emms-setup)
-(require 'emms-streams)
-(emms-standard)
-(emms-default-players)
+;;(require 'emms-setup)
+;;(emms-standard)
+;;(emms-default-players)
+;;(emms-mode-line-disable)
 
-(global-set-key (kbd "C-c e s") 'emms-start)
-(global-set-key (kbd "C-c e P") 'emms-pause)
-(global-set-key (kbd "C-c e n") 'emms-next)
-(global-set-key (kbd "C-c e p") 'emms-previous)
+;;(global-set-key (kbd "C-c e s") 'emms-start)
+;;(global-set-key (kbd "C-c e P") 'emms-pause)
+;;(global-set-key (kbd "C-c e n") 'emms-next)
+;;(global-set-key (kbd "C-c e p") 'emms-previous)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
